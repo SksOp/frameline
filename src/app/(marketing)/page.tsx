@@ -1,0 +1,15 @@
+import { ArrowRight, Eye, LockKeyhole, PictureInPicture2, Sparkles } from "lucide-react";
+import Link from "next/link";
+
+export default function HomePage() {
+  return <main>
+    <nav className="nav shell" aria-label="Main navigation"><Link className="wordmark" href="/">Frameline</Link><Link className="nav-cta" href="/teleprompter">Open teleprompter <ArrowRight size={16}/></Link></nav>
+    <section className="hero shell"><div className="hero-copy"><p className="eyebrow">Speak naturally. Stay present.</p><h1>Your words,<br/><em>close to the camera.</em></h1><p className="hero-lede">A floating teleprompter that works over the camera and social apps you already love—prepared privately, right on your phone.</p><Link className="primary-link" href="/teleprompter">Paste your script <ArrowRight/></Link><p className="microcopy"><LockKeyhole size={15}/> No account · No upload · No permanent download</p></div>
+      <div className="hero-art" aria-label="Illustration of a floating teleprompter"><div className="phone"><div className="camera-dot"/><div className="pip-card"><span/><p>Tell the story<br/>only you can tell.</p><span/></div><div className="record-button"/></div><i className="orbit orbit-one"/><i className="orbit orbit-two"/></div>
+    </section>
+    <section className="promise shell"><p className="eyebrow">A lighter way to prepare</p><h2>From blank page to camera-ready<br/>in three quiet steps.</h2><div className="steps"><article><span>01</span><Sparkles/><h3>Paste your words</h3><p>Write or paste a plain-text script. Your current draft is remembered locally on your phone.</p></article><article><span>02</span><Eye/><h3>Find your rhythm</h3><p>Tune the type, pace, colors, guide, and start delay with an immediate preview.</p></article><article><span>03</span><PictureInPicture2/><h3>Float and record</h3><p>Prepare a video on-device, open Android Picture-in-Picture, and switch to your camera app.</p></article></div></section>
+    <section className="truth"><div className="shell truth-grid"><div><p className="eyebrow">Made for trust</p><h2>Your script stays yours.</h2></div><div><p>Frameline prepares the teleprompter entirely in your browser. Script and generated video remain on your device; nothing is sent to us.</p><p className="platform-note">Designed for current Android Chrome over HTTPS. The floating window is an opaque system Picture-in-Picture video—not a transparent overlay.</p></div></div></section>
+    <section className="coming shell"><p className="eyebrow">Coming next</p><h2>A calm home for every script.</h2><div className="coming-list"><p>Personal library and cross-device sync</p><p>Imports from the tools you use</p><p>Delivery cues and timed sections</p><p>Faster reuse across sessions</p></div><small>Direction we’re exploring—not features available today.</small></section>
+    <footer className="footer shell"><span className="wordmark">Frameline</span><p>Built for creators who want to sound like themselves.</p><Link href="/teleprompter">Start prompting <ArrowRight size={16}/></Link></footer>
+  </main>;
+}

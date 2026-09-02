@@ -1,1 +1,8 @@
 .concept/
+node_modules/
+.next/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+.DS_Store
