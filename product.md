@@ -42,7 +42,7 @@ Client-side WebCodecs gives the product the strongest combination of the project
 - A real video source that continues when browser JavaScript is backgrounded
 - Repeat attempts without regenerating or downloading another file
 - Speed changes through `HTMLVideoElement.playbackRate`
-- Worker-based rendering that does not freeze the interface
+- One-frame-at-a-time worker encoding that keeps the interface responsive
 
 Concept 1 was not selected because backend FFmpeg introduces infrastructure cost, queueing, data transfer, retention, monitoring, and scaling work. Concept 3 was not selected because a live canvas stream depends on background JavaScript, while its dependency-free pre-composition fallback is tied to wall-clock recording time.
 
@@ -88,7 +88,7 @@ Next.js is selected for the product trajectory rather than because the encoding 
 
 - Keep the landing page, help pages, privacy information, and other public content as Server Components or statically rendered pages by default.
 - Put the interactive teleprompter workspace behind a narrow Client Component boundary.
-- Keep `window`, `localStorage`, Picture-in-Picture, WebCodecs, `VideoFrame`, `OffscreenCanvas`, and worker lifecycle code in client-only modules.
+- Keep `window`, `localStorage`, Picture-in-Picture, WebCodecs, client `HTMLCanvasElement` painting, `VideoFrame`, and worker lifecycle code in client-only modules.
 - Do not import browser-only encoding modules from Server Components.
 - Load the encoder worker only when the user enters or prepares the teleprompter so the landing page does not pay its bundle cost.
 - Keep video generation entirely on the device even after accounts and cloud storage are introduced.
@@ -103,7 +103,7 @@ components/
 features/teleprompter/   UI and orchestration for the browser product
 lib/scripts/             Versioned script domain model and validation
 lib/client/              Browser-only storage and capability detection
-workers/                 Rendering, encoding, and muxing worker entry points
+workers/                 Encoding and muxing worker entry points
 ```
 
 The precise folders can evolve, but the boundaries are important. Rendering and encoding should remain framework-independent TypeScript modules where practical, with React responsible for interface state and orchestration.
@@ -141,12 +141,12 @@ React with Vite would be a smaller fit for the client-only MVP, but it would req
 ## Core user flow
 
 1. The creator opens the HTTPS website on an Android phone.
-2. The website checks PiP, Worker, OffscreenCanvas, and VideoEncoder support.
+2. The website checks PiP, Worker, `HTMLCanvasElement` 2D context, VideoFrame, and VideoEncoder support.
 3. The creator pastes or writes a script.
 4. The creator configures text and reading settings.
 5. A normal browser preview shows the expected teleprompter.
 6. The creator selects **Prepare floating teleprompter**.
-7. A dedicated worker lays out, renders, encodes, and muxes the video locally.
+7. The client builds one render plan, paints timestamped frames on an `HTMLCanvasElement`, and transfers them one at a time to a dedicated local encoding/muxing worker.
 8. The UI shows progress and remains responsive.
 9. The completed WebM is attached to a video through an in-memory Blob URL.
 10. The creator selects **Open floating teleprompter**.
@@ -213,15 +213,15 @@ The background is visually customizable but remains part of an opaque PiP video 
 Main browser document
   ├── Script editor and controls
   ├── Capability detection
-  ├── Preview
+  ├── Shared text layout and preview
+  ├── HTMLCanvasElement frame painting
+  ├── VideoFrame creation and one-at-a-time transfer
   ├── Progress and cancellation
   └── HTMLVideoElement → Android Picture-in-Picture
 
 Dedicated encoding worker
-  ├── Text layout
-  ├── OffscreenCanvas frame rendering
-  ├── VideoFrame creation
-  ├── VideoEncoder
+  ├── Receives one transferable VideoFrame at a time
+  ├── VideoEncoder with bounded queue depth
   └── WebM muxer → transferable ArrayBuffer
 ```
 
@@ -231,6 +231,8 @@ Dedicated encoding worker
 - Validate the script and configuration
 - Perform capability checks
 - Create and terminate the encoding worker
+- Measure and wrap text once into a shared immutable render plan
+- Paint each frame on an `HTMLCanvasElement`, create its timestamped `VideoFrame`, and transfer it to the worker
 - Report worker progress
 - Convert the returned buffer into a Blob URL
 - Own the video element and PiP lifecycle
@@ -239,10 +241,7 @@ Dedicated encoding worker
 
 ### Worker responsibilities
 
-- Measure and wrap text once
-- Calculate total travel distance and canonical duration
-- Render frames at 30 FPS
-- Paint only lines visible in the current viewport
+- Request and receive one transferable frame at a time
 - Submit frames to one asynchronous VideoEncoder
 - Apply encoder queue backpressure
 - Insert regular keyframes
@@ -310,7 +309,7 @@ Long scripts increase frame count, encoding work, output size, and memory use. O
 
 1. Layout once.
 2. Render only visible lines.
-3. Use OffscreenCanvas inside a dedicated worker.
+3. Paint on a client `HTMLCanvasElement`, create a `VideoFrame`, and transfer only one frame at a time to the encoding worker.
 4. Use one asynchronous encoder with bounded queue depth.
 5. Prefer hardware acceleration but retain a portable configuration.
 6. Transfer rather than copy the completed ArrayBuffer.
@@ -334,7 +333,7 @@ Fast generation requires:
 
 - HTTPS or another secure context
 - Dedicated Worker
-- OffscreenCanvas
+- `HTMLCanvasElement` 2D context
 - VideoEncoder and VideoFrame
 - A supported encoding configuration
 - Video Picture-in-Picture
@@ -431,7 +430,7 @@ The product needs specific messages for:
 - Insecure HTTP context
 - PiP unavailable or disabled
 - VideoEncoder missing
-- OffscreenCanvas missing
+- Canvas 2D context or client `VideoFrame` creation unavailable
 - Unsupported codec configuration
 - Encoder initialization failure
 - Worker crash

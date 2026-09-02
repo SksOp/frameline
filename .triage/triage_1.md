@@ -16,7 +16,7 @@ This plan ends at a locally verified production build. Vercel deployment belongs
 - SEO metadata and a branded Open Graph/social-sharing image
 - The full client-side teleprompter user experience
 - Local draft/settings persistence
-- Dedicated encoding worker, WebCodecs, OffscreenCanvas, WebM muxing, video playback, and PiP
+- Client `HTMLCanvasElement` painting and `VideoFrame` creation, transferable frames, a dedicated WebCodecs/WebM encoding worker, video playback, and PiP
 - Automated verification and real Android device acceptance
 
 ### Out of scope
@@ -58,7 +58,7 @@ Before implementation begins, record the exact runtime versions and confirm ever
   ```
 
 - Communicate through typed `postMessage` messages and terminate the worker during cancellation, failure, replacement, and component cleanup.
-- Initialize shadcn/ui with its CLI, use CSS-variable theming, and add individual components only when the product needs them.
+- Initialize shadcn/ui with its CLI, use CSS-variable theming, and maintain the complete repository-owned `base-nova` component catalog.
 - Initialize the selected Elegant Luxury registry theme with the exact reviewed command in Phase 2.
 - Use Playwright role/label locators and retrying assertions rather than CSS selectors and fixed sleeps.
 
@@ -162,7 +162,7 @@ Current browser documentation defines the module-worker pattern, while current N
    ```
 
 3. Treat the resulting `base-nova` style, Base UI primitive selection, Remix icon configuration, and Poppins/Libre Baskerville/IBM Plex Mono font dependencies as the chosen starting foundation. Inspect the generated output and record any intentional product-level overrides rather than rerunning initialization with a conflicting preset.
-4. Add only components required by known flows. The initial shortlist is Button, Card, Textarea, Slider, Switch, Tooltip, Dialog, Progress, Alert, Separator, and Label; confirm each against the actual wireframes before adding it.
+4. Install the complete official shadcn/ui component catalog using the repository's reviewed `base-nova` configuration. Run `npx shadcn@latest add --all --dry-run` first, review its dependency and file plan, then run `npx shadcn@latest add --all --yes` without `--overwrite`.
 5. Keep generated components under `src/components/ui/`. Treat that code as application-owned: review it, style it with tokens, and test modifications.
 6. Put product composites—capability notices, settings rows, generation status, and action bars—outside `components/ui`, under their feature or shared component boundary.
 
@@ -180,11 +180,11 @@ Current browser documentation defines the module-worker pattern, while current N
 - A Server Component can render a non-interactive shadcn component.
 - Interactive components work only beneath intentional client boundaries.
 - Focus rings, disabled states, touch target sizes, and keyboard behavior remain intact.
-- Only components used by committed screens exist in `components/ui`.
+- The installed `components/ui` inventory matches the official catalog reported by the reviewed `--all --dry-run` output, and routes import only the primitives they use.
 
 ### Anti-pattern guards
 
-- Do not install the full component catalog.
+- Do not combine the catalog install with `--overwrite`; preserve reviewed application-owned changes and resolve collisions individually.
 - Do not substitute another preset, primitive base, or theme during implementation without updating this plan.
 - Do not leave a runtime dependency on the Shadcn Studio registry URL; generated theme source and dependencies must live in the project.
 - Do not treat shadcn/ui as an immutable external package; its generated source is owned here.
@@ -309,7 +309,7 @@ Phase 6 is the product implementation phase. Complete its slices in order so eac
 
 ### 6B. Capability and failure model
 
-- Detect secure context, Worker, OffscreenCanvas, VideoEncoder, VideoFrame, codec configuration, and video Picture-in-Picture independently.
+- Detect secure context, Worker, `HTMLCanvasElement` 2D context, VideoEncoder, VideoFrame, codec configuration, and video Picture-in-Picture independently.
 - Represent each capability as typed data and show a specific recovery message.
 - Test the exact VP8 configuration with `VideoEncoder.isConfigSupported()` before generation.
 - Model idle, validating, generating, cancelling, ready, playing, paused, failed, and unsupported states explicitly.
@@ -333,7 +333,7 @@ Phase 6 is the product implementation phase. Complete its slices in order so eac
 ### 6E. Dedicated encoding worker
 
 - Create typed request, progress, completion, cancellation, and error messages in `src/features/teleprompter/encoding/messages.ts`.
-- Implement `src/workers/teleprompter-encoder.worker.ts` using OffscreenCanvas, VideoFrame, VideoEncoder, and a pinned locally installed browser-compatible WebM muxer.
+- Paint on a client `HTMLCanvasElement`, create and transfer one `VideoFrame` at a time, and implement `src/workers/teleprompter-encoder.worker.ts` using VideoEncoder plus a pinned locally installed browser-compatible WebM muxer.
 - Encode the required 30 FPS timeline with explicit microsecond timestamps, bounded queue depth, regular keyframes, and asynchronous backpressure.
 - Close each `VideoFrame` immediately after enqueueing it.
 - Transfer the completed `ArrayBuffer` rather than copying it.
@@ -363,7 +363,7 @@ Phase 6 is the product implementation phase. Complete its slices in order so eac
 - Copy the basic layout/paint behavior from `.concept/shared/teleprompter.js`, then apply the product's layout-once and visible-lines-only requirements.
 - Copy the encoder sequencing and PiP proof from `.concept/concepts/client-webcodecs/app.js`, but move encoding off the main thread and replace its CDN dependency.
 - Use [MDN `Worker()`](https://developer.mozilla.org/en-US/docs/Web/API/Worker/Worker) and [Using Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) for worker construction, messaging, transfers, and termination.
-- Re-check MDN and browser compatibility data for WebCodecs, OffscreenCanvas, and Picture-in-Picture immediately before implementation because these APIs evolve independently of Next.js.
+- Re-check MDN and browser compatibility data for WebCodecs, client `HTMLCanvasElement`/VideoFrame transfer, and Picture-in-Picture immediately before implementation because these APIs evolve independently of Next.js.
 
 ### Verification checklist
 
@@ -387,6 +387,73 @@ Phase 6 is the product implementation phase. Complete its slices in order so eac
 - Do not upload scripts or introduce a server fallback.
 - Do not request PiP from an effect, timer, or completed-worker callback.
 
+## Phase 6H — Responsive help, complete component catalog, and application decomposition
+
+This maintainability follow-up must be completed before adding more teleprompter controls.
+
+### What to implement
+
+1. Finish the current settings-help task by composing the official `HoverCard`, `HoverCardTrigger`, and `HoverCardContent` from `src/components/ui/hover-card.tsx` for desktop. Keep essential explanations available through a tap/click disclosure on phones; hover-only content is not accessible enough to be the sole source.
+2. Run `npx shadcn@latest add --all --dry-run`, review the file and dependency list, then install the complete official component catalog with `npx shadcn@latest add --all --yes`. Preserve the `base-nova` style, reconcile shadcn semantic tokens with Frameline's tokens, and never apply `--overwrite` without an explicit per-file review.
+3. Reduce `src/features/teleprompter/teleprompter-app.tsx` to a composition root. Extract the app header, capability notice, script pane, live preview pane, bottom action dock, Tune dialog, setting help, range control, and prepared-video surface into named feature components.
+4. Create a typed teleprompter reducer and provider for coordinated serializable editor, settings, and UI state. Define a closed `TeleprompterAction` union and pure reducer tests. Keep worker/video lifecycle ownership inside `useTeleprompterSession`; do not mix `VideoFrame`, Worker, Blob URL, canvas, video-element, or cancellation resources into reducer state.
+5. Extract local draft persistence, settings persistence, capability bootstrap, dialog lifecycle, generated-output signature comparison, and preview timing into focused hooks or pure modules. Derived values such as word count, duration, preview identity, stale-output status, and primary-action presentation must not be stored as independently mutable copies.
+6. Use the following structure as the initial ownership boundary, adjusting names only when tests demonstrate a clearer model:
+
+   ```text
+   src/features/teleprompter/
+     components/
+       teleprompter-header.tsx
+       capability-notice.tsx
+       script-pane.tsx
+       preview-pane.tsx
+       teleprompter-dock.tsx
+       tune-dialog.tsx
+       setting-with-info.tsx
+       range-control.tsx
+       prepared-video.tsx
+     state/
+       teleprompter-context.tsx
+       teleprompter-reducer.ts
+       teleprompter-reducer.test.ts
+       teleprompter-selectors.ts
+     hooks/
+       use-draft-persistence.ts
+       use-settings-persistence.ts
+     teleprompter-app.tsx
+   ```
+
+7. Move teleprompter-specific styling out of the marketing stylesheet into a feature-owned stylesheet or CSS module while keeping shared semantic tokens in `src/app/globals.css`.
+8. Add `AGENTS.md` as the canonical repository instruction file and `CLAUDE.md` as a pointer to it. Record the client-only boundary, reusable-component ownership, responsive/touch requirements, state/effect rules, WebCodecs lifecycle invariants, and verification commands.
+
+### Documentation references
+
+- Follow the official [shadcn CLI](https://ui.shadcn.com/docs/cli) `add --all`, `--dry-run`, and default non-overwrite behavior.
+- Follow the official [shadcn Hover Card](https://ui.shadcn.com/docs/components/base/hover-card) composition, trigger-delay, and positioning props.
+- Follow the underlying [Base UI Preview Card](https://base-ui.com/react/components/preview-card) accessibility guidance: preview content is progressive enhancement and cannot be the only way touch or screen-reader users receive essential information.
+- Copy the existing session resource ownership from `src/features/teleprompter/use-teleprompter-session.ts`; do not recreate it in context.
+- Preserve the deterministic rendering APIs in `src/features/teleprompter/rendering/plan.ts` and `src/features/teleprompter/rendering/paint-frame.ts`.
+
+### Verification checklist
+
+- The catalog dry-run inventory and dependency changes are reviewed before installation; customized UI files are not overwritten silently.
+- The complete catalog exists under `src/components/ui`, while production routes tree-shake primitives they do not import.
+- `teleprompter-app.tsx` reads as orchestration rather than containing the full editor, preview, settings, persistence, and action implementations.
+- Reducer actions and state transitions have unit tests; resource-bearing session state remains in the session hook.
+- Desktop help uses the official shadcn Hover Card portal without shifting Tune dialog dimensions. Phone help opens by tap and remains readable without hover.
+- Script changes and frame-affecting settings still mark prepared output stale; playback-only speed and loop changes still avoid recompilation.
+- Preview and encoded frames preserve paragraph breaks, guide/progress options, timing, and output parity.
+- Type-checking, unit tests, lint, the full desktop/mobile Playwright suite, production build, and real Android acceptance all pass.
+
+### Anti-pattern guards
+
+- Do not replace one large component with one equally large context provider.
+- Do not put every value in context; keep truly local interaction state in its owning component and derive values instead of synchronizing copies.
+- Do not put workers, frames, canvases, video elements, Blob URLs, or cancellation handles in reducer state.
+- Do not create feature-specific forks inside `src/components/ui`; compose catalog primitives under the teleprompter feature.
+- Do not make hover the only access path to help content.
+- Do not add barrel files that hide client/server boundaries or create circular imports.
+
 ## Phase 7 — Verification and Trial 1 release gate
 
 ### What to implement
@@ -398,7 +465,7 @@ Phase 6 is the product implementation phase. Complete its slices in order so eac
 5. Execute the complete `product.md` test matrix on a current Pixel, a mid-range Samsung, and at least one lower-memory Android phone.
 6. Record preparation time, output size, peak memory, responsiveness, PiP continuity, and repeated-attempt memory behavior for short, medium, and long scripts.
 7. Write a concise manual test record containing device, Android version, Chrome version, encoder configuration, result, and known limitation.
-8. Remove debug logging, dead prototype imports, unused shadcn components, and accidental server/backend code.
+8. Remove debug logging, dead prototype imports, accidental server/backend code, and duplicate product components that should compose installed shadcn primitives. Retain the intentionally installed shadcn catalog.
 
 ### Documentation references
 

@@ -38,12 +38,12 @@ Turn the selected WebCodecs concept into the complete, maintainable client-only 
 ### Included
 
 - Next.js App Router, React, strict TypeScript, and local quality tooling
-- shadcn/ui installed as owned component source, with only required components added
+- The complete official shadcn/ui component catalog installed as owned `base-nova` source for consistent long-term reuse
 - Product-specific design tokens, responsive behavior, accessibility rules, and a design guide
 - Public landing page with the immediate no-account workflow and restrained future direction
 - Search metadata and branded Open Graph/social-sharing imagery
 - Script editor, settings, preview, capability reporting, progress, cancellation, errors, and session recovery
-- Dedicated worker using OffscreenCanvas, WebCodecs, and a locally installed WebM muxer
+- Client `HTMLCanvasElement` painting and `VideoFrame` creation, with one transferable frame at a time sent to a dedicated WebCodecs/WebM encoding worker
 - HTML video playback and Android Picture-in-Picture lifecycle
 - IndexedDB draft persistence and small local preferences
 - Unit, integration, browser, performance, memory, and real-device validation
