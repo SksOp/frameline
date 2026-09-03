@@ -9,14 +9,27 @@ import { ScriptPane } from "./script-pane";
 import { TeleprompterDock } from "./teleprompter-dock";
 import { TuneDialog } from "./tune-dialog";
 import { useTeleprompterController } from "../hooks/use-teleprompter-controller";
+import { useTheme } from "../hooks/use-theme";
 import { settingChanged } from "../state/teleprompter-state";
 
 export function TeleprompterWorkspace() {
   const { state, dispatch, session, derived, clear, primaryAction } = useTeleprompterController();
+  const { theme, resolvedTheme, setTheme, toggleTheme } = useTheme();
+
   return (
-    <main className="teleprompter-root workspace app-shell">
+    <main
+      className={`teleprompter-root workspace app-shell ${resolvedTheme === "dark" ? "dark" : ""}`}
+      data-theme={resolvedTheme}
+    >
       <h1 className="sr-only">Frameline teleprompter</h1>
-      <AppHeader words={derived.words} duration={derived.duration} onOpenSettings={() => dispatch({ type: "settingsOpened" })} />
+      <AppHeader
+        words={derived.words}
+        duration={derived.duration}
+        onOpenSettings={() => dispatch({ type: "settingsOpened" })}
+        theme={theme}
+        resolvedTheme={resolvedTheme}
+        onToggleTheme={toggleTheme}
+      />
       <CapabilityNotice unsupported={derived.unsupported} />
       <div className="app-stage" data-mobile-view={state.mobileView}>
         <ScriptPane
@@ -45,6 +58,7 @@ export function TeleprompterWorkspace() {
       <TuneDialog
         open={state.settingsOpen} settings={state.settings} onClose={() => dispatch({ type: "settingsClosed" })}
         onSettingChange={(key, value) => dispatch(settingChanged(key, value))}
+        theme={theme} onThemeChange={setTheme}
       />
     </main>
   );

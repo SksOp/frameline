@@ -10,16 +10,24 @@ import {
 } from "@/components/ui/drawer";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { useMediaQuery } from "../hooks/use-media-query";
+import type { ThemePreference } from "../hooks/use-theme";
 import { HORIZONTAL_PADDING_BOUNDS, type TeleprompterSettings } from "../types";
 import { RangeControl } from "./range-control";
 import { SettingWithInfo } from "./setting-with-info";
 
 type SettingUpdater = <Key extends keyof TeleprompterSettings>(key: Key, value: TeleprompterSettings[Key]) => void;
-type TuneDialogProps = { open: boolean; settings: TeleprompterSettings; onClose(): void; onSettingChange: SettingUpdater };
+type TuneDialogProps = {
+  open: boolean;
+  settings: TeleprompterSettings;
+  onClose(): void;
+  onSettingChange: SettingUpdater;
+  theme?: ThemePreference;
+  onThemeChange?: (theme: ThemePreference) => void;
+};
 
-export function TuneDialog({ open, settings, onClose, onSettingChange }: TuneDialogProps) {
+export function TuneDialog({ open, settings, onClose, onSettingChange, theme, onThemeChange }: TuneDialogProps) {
   const phone = useMediaQuery("(max-width: 760px)");
-  const controls = <TuneControls settings={settings} update={onSettingChange} />;
+  const controls = <TuneControls settings={settings} update={onSettingChange} theme={theme} onThemeChange={onThemeChange} />;
   const footer = <SettingsFooter onClose={onClose} />;
   const handleOpenChange = (nextOpen: boolean) => { if (!nextOpen) onClose(); };
 
@@ -53,7 +61,17 @@ function TuneHeading({ title, onClose }: { title: React.ReactNode; onClose(): vo
   </div>;
 }
 
-function TuneControls({ settings, update }: { settings: TeleprompterSettings; update: SettingUpdater }) {
+function TuneControls({
+  settings,
+  update,
+  theme,
+  onThemeChange,
+}: {
+  settings: TeleprompterSettings;
+  update: SettingUpdater;
+  theme?: ThemePreference;
+  onThemeChange?: (theme: ThemePreference) => void;
+}) {
   return <div className="settings-body">
     <fieldset><legend>Reading</legend><div className="settings-grid">
       <RangeControl label="Speed" value={settings.wordsPerMinute} min={75} max={300} suffix=" wpm" onChange={(value) => update("wordsPerMinute", value)} />
@@ -75,6 +93,15 @@ function TuneControls({ settings, update }: { settings: TeleprompterSettings; up
       <SettingWithInfo id="progress" label="Reading progress" description="Adds a green timeline to the preview and prepared video so you can judge how much of the script remains." checked={settings.showProgress} onChange={(checked) => update("showProgress", checked)} />
       <SettingWithInfo id="loop" label="Loop attempts" description="Restarts the prepared video automatically after it reaches the end. This does not require recompiling." checked={settings.loop} onChange={(checked) => update("loop", checked)} />
     </div></fieldset>
+    {onThemeChange && (
+      <fieldset><legend>App</legend><div className="settings-grid compact-settings">
+        <label className="control"><span>Appearance</span><NativeSelect value={theme ?? "system"} onChange={(event) => onThemeChange(event.target.value as ThemePreference)}>
+          <NativeSelectOption value="system">System (default)</NativeSelectOption>
+          <NativeSelectOption value="dark">Dark mode</NativeSelectOption>
+          <NativeSelectOption value="light">Light mode</NativeSelectOption>
+        </NativeSelect></label>
+      </div></fieldset>
+    )}
   </div>;
 }
 
