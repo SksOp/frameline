@@ -15,7 +15,7 @@ function Slider({
     ? value
     : Array.isArray(defaultValue)
       ? defaultValue
-      : [min, max]
+      : [value ?? defaultValue ?? min]
 
   return (
     <SliderPrimitive.Root
@@ -42,6 +42,7 @@ function Slider({
           <SliderPrimitive.Thumb
             data-slot="slider-thumb"
             key={index}
+            index={index}
             className="relative block size-4 shrink-0 rounded-[2px] border-2 border-foreground bg-[var(--fl-pink)] shadow-[2px_2px_0_var(--fl-ink)] transition-[transform,box-shadow,background] select-none after:absolute after:-inset-3 hover:-translate-y-0.5 hover:bg-[var(--fl-lime)] hover:shadow-[3px_3px_0_var(--fl-ink)] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-ring active:translate-x-0.5 active:translate-y-0.5 active:shadow-none disabled:pointer-events-none disabled:opacity-50"
           />
         ))}

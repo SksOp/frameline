@@ -5,7 +5,7 @@ type RangeControlProps = { label: string; value: number; min: number; max: numbe
 export function RangeControl({ label, value, min, max, step = 1, suffix = "", onChange }: RangeControlProps) {
   const labelId = `${label.toLowerCase().replaceAll(" ", "-")}-label`;
   const handleValueChange = (next: number | readonly number[]) => {
-    const candidate = Array.isArray(next) ? next[0] : undefined;
+    const candidate = Array.isArray(next) ? next[0] : next;
     if (!Number.isFinite(candidate)) return;
     onChange(Math.min(max, Math.max(min, candidate)));
   };

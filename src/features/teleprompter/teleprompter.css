@@ -33,7 +33,7 @@
 .teleprompter-root .script-status{margin-top:15px;padding-top:12px;display:flex;justify-content:space-between;gap:16px;border-top:2px solid var(--fl-ink);color:var(--fl-muted);font:750 .64rem "Roboto Mono Variable",monospace;text-transform:uppercase}
 .teleprompter-root .script-status span:first-child{color:var(--fl-positive)}
 
-.teleprompter-root .preview { width:100%;overflow:hidden;position:relative;display:grid;place-items:center;border:3px solid var(--fl-ink);border-radius:4px;background:var(--fl-ink);box-shadow:7px 7px 0 var(--fl-violet);container-type:size; }
+.teleprompter-root .preview { width:100%;overflow:hidden;position:relative;display:grid;place-items:center;border:none;border-radius:4px;background:var(--fl-ink);box-shadow:0 0 0 3px var(--fl-ink), 7px 7px 0 var(--fl-violet);container-type:size; }
 .teleprompter-root .preview-viewport{position:relative;width:min(100cqw,calc(100cqh * var(--preview-aspect)));aspect-ratio:var(--preview-aspect);overflow:hidden;font-size:var(--preview-font-size);line-height:var(--preview-line-height)}
 .teleprompter-root .preview-script{position:absolute;top:0;left:var(--preview-padding);right:var(--preview-padding);margin:0;font-size:var(--preview-font-size);line-height:var(--preview-line-height);animation:frameline-preview-scroll var(--preview-duration) linear var(--preview-delay) infinite both;animation-play-state:var(--preview-play-state);will-change:transform}
 .teleprompter-root .preview-line{display:block;height:var(--preview-line-height);white-space:pre;overflow:hidden}

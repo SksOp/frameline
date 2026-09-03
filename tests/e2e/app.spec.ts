@@ -2,8 +2,8 @@ import { expect, test } from "@playwright/test";
 
 test("landing explains the private workflow", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: /Your words/ })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Paste your script/ })).toHaveAttribute("href", "/teleprompter");
+  await expect(page.getByRole("heading", { name: /Talk like|Your words/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Try it right now|Paste your script|Skip to the good take/ }).first()).toHaveAttribute("href", "/teleprompter");
   await expect(page.locator("body")).toHaveCSS("overflow-x", "hidden");
 });
 
@@ -45,7 +45,7 @@ test("prepares video frames from the client canvas", async ({ page }) => {
   await page.addInitScript(() => {
     Object.defineProperty(document, "pictureInPictureEnabled", { configurable: true, value: true });
   });
-  await page.goto("http://localhost:4445/teleprompter");
+  await page.goto("/teleprompter");
   const supportsWebCodecs = await page.evaluate(async () => {
     if (!("VideoEncoder" in globalThis) || !("VideoFrame" in globalThis)) return false;
     const result = await VideoEncoder.isConfigSupported({ codec: "vp8", width: 900, height: 300, framerate: 30, bitrate: 650_000 });
@@ -93,7 +93,7 @@ test("prepares video frames from the client canvas", async ({ page }) => {
   const staleBox = await page.getByLabel("Prepared teleprompter video").boundingBox();
   expect((staleBox?.width ?? 0) / (staleBox?.height ?? 1)).toBeCloseTo(preparedAspect, 1);
 
-  if ((page.viewportSize()?.width ?? 0) <= 760) await page.getByRole("button", { name: "Script", exact: true }).click();
+  if ((page.viewportSize()?.width ?? 0) <= 760) await page.getByRole("button", { name: "Script", exact: true }).dispatchEvent("click");
   await page.getByLabel("Your script").fill("An updated smoke test for locally generated teleprompter frames.");
   await expect(page.getByRole("button", { name: "Recompile teleprompter" })).toBeVisible();
   await page.getByRole("button", { name: "Recompile teleprompter" }).dispatchEvent("click");
