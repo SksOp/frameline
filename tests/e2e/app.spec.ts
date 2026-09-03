@@ -7,6 +7,19 @@ test("landing explains the private workflow", async ({ page }) => {
   await expect(page.locator("body")).toHaveCSS("overflow-x", "hidden");
 });
 
+test("landing exposes crawlable open graph tags", async ({ page, request }) => {
+  await page.goto("/");
+  const ogImage = await page.locator('meta[property="og:image"]').getAttribute("content");
+  expect(ogImage).toMatch(/^https:\/\//);
+  expect(ogImage).not.toMatch(/localhost|127\.0\.0\.1/);
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", /Frameline/);
+  await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "website");
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute("content", /^https:\/\//);
+  const image = await request.get("/opengraph-image");
+  expect(image.ok()).toBeTruthy();
+  expect(image.headers()["content-type"]).toMatch(/image\/png/);
+});
+
 test("script editing gives immediate feedback and persists locally", async ({ page }) => {
   await page.goto("/teleprompter");
   await expect(page.locator(".app-header-meta")).toContainText("0:00");

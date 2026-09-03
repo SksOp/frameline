@@ -19,7 +19,7 @@ npm test
 npm run build
 ```
 
-Set `NEXT_PUBLIC_SITE_URL` only to the real deployed origin. Without it, local builds intentionally omit canonical URLs and return an empty sitemap rather than publishing localhost as canonical.
+Open Graph, canonical, and sitemap URLs use `https://frameline.sksop.in` by default. Set `NEXT_PUBLIC_SITE_URL` to override that origin (for example a preview or ngrok HTTPS URL). Localhost is never published as `metadataBase`, because crawlers cannot fetch it and treat the share tags as missing.
 
 ## Privacy and local data
 
