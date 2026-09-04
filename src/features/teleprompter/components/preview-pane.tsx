@@ -31,7 +31,7 @@ export function PreviewPane({ text, settings, timeline, previewKey, previewPause
   } as CSSProperties;
   return <section className="app-pane preview-pane" aria-labelledby="preview-heading">
     <div className="pane-toolbar preview-toolbar">
-      <div><span className="pane-kicker">Live preview</span><h2 id="preview-heading">Reading window</h2></div>
+      <div><span className="pane-kicker">Practice</span><h2 id="preview-heading">Reading window</h2></div>
       <div className="preview-tools">
         <Button className="tool-button icon-only" size="icon-lg" variant="ghost" aria-label={previewPaused ? "Resume preview" : "Pause preview"} onClick={onTogglePause}>{previewPaused ? <Play /> : <Pause />}</Button>
         <Button className="tool-button icon-only" size="icon-lg" variant="ghost" aria-label="Restart preview" onClick={() => setRestartEpoch((current) => current + 1)}><RotateCcw /></Button>

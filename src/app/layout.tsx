@@ -17,12 +17,12 @@ const socialImage = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(origin),
-  title: { default: "Frameline — Talk like you mean it", template: "%s · Frameline" },
-  description: "Prepare a floating teleprompter privately on your Android phone. On-device processing, no account, no uploads.",
+  title: { default: "Frameline — Focused creator tools", template: "%s · Frameline" },
+  description: "Focused creator tools with private, immediate, client-side workflows where practical and a free path to start.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "Frameline — Talk like you mean it",
-    description: "Private on-device floating teleprompter for Android Chrome.",
+    title: "Frameline — Focused creator tools",
+    description: "Make the thing, skip the setup. Private, immediate creator tools with a free path to start.",
     type: "website",
     url: "/",
     siteName: "Frameline",
@@ -31,12 +31,12 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Frameline",
-    description: "Private on-device floating teleprompter for Android Chrome.",
+    title: "Frameline — Focused creator tools",
+    description: "Make the thing, skip the setup. Private, immediate creator tools with a free path to start.",
     images: [socialImage],
   },
 };
-export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: "#0a0a0a" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", themeColor: "#f4ead8" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="en"><body>{children}</body></html>;

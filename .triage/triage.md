@@ -6,7 +6,7 @@ This file is the program-level path for Frameline. It records the outcome, bound
 
 Frameline began with one local-first teleprompter. Its broader direction is now a private creative studio: a bookmark-worthy collection of focused tools that creators can open and use immediately. **Frameline is the umbrella brand; each tool has its own clear product name and job.**
 
-Trial 1 and Trial 2 are complete. Trial 3 is the next product transition. Its detailed plan will be written in `triage_3.md` after the direction in this roadmap has been reviewed.
+Trial 1 and Trial 2 are complete. Trial 3 is the next product transition. Its reviewed execution plan is documented in [`triage_3.md`](triage_3.md), including the selected Human Canvas design direction.
 
 ## Sequence and status
 
@@ -16,7 +16,7 @@ Trial 1: final client-side teleprompter                    COMPLETE
 Trial 2: Vercel delivery and public release               COMPLETE
     ↓ stable public foundation
 Trial 3: Frameline creator-studio foundation              NEXT
-    ↓ multiple useful, no-account creator tools
+    ↓ one proven tool in a foundation designed to grow
 Trial 4: optional accounts, sync, and connected benefits  DEFERRED
 ```
 
@@ -80,7 +80,7 @@ Production delivery does not change the local processing promise. Script text an
 
 ### Goal
 
-Reposition Frameline from “a teleprompter product” to “a private creative studio made of focused tools,” then prove that positioning with a coherent discovery experience and at least two genuinely useful products.
+Reposition Frameline from “a teleprompter product” to “a private creative studio made of focused tools,” then prove that positioning with a coherent discovery experience, one proven launch product, and a foundation that can add tools without another redesign.
 
 ### Expected scope
 
@@ -96,7 +96,7 @@ Reposition Frameline from “a teleprompter product” to “a private creative 
 #### Information architecture
 
 - Rebuild the root landing page as the Frameline studio home rather than a single-product sales page.
-- Add a browsable products/tools index that is useful with two tools and can grow without becoming a cluttered marketplace.
+- Add a browsable products/tools index that feels intentional with one live tool and can grow without becoming a cluttered marketplace.
 - Give every tool a dedicated public product page with its job, example output, privacy model, supported platforms, limitations, and direct launch action.
 - Keep product explanation separate from the focused tool workspace.
 - Establish shared navigation between the studio home, product pages, and tool workspaces without introducing a required dashboard.
@@ -111,15 +111,12 @@ Reposition Frameline from “a teleprompter product” to “a private creative 
 - Preserve old public links through redirects or a compatibility route when the final URL is selected.
 - Keep Daily Prompter's Android Chrome and opaque Picture-in-Picture limitations explicit.
 
-#### Code Animator product
+#### Future Code Animator product
 
-- Validate the smallest useful job: turn pasted code into a polished, animated visual that is ready to share.
-- Define a no-account, local-first input-to-preview-to-export workflow.
-- Select a deliberately narrow Version 1 feature set: code input, language/theme choice, a small set of motion presets, aspect-ratio/output controls, live preview, and a practical export format.
-- Research browser-native rendering and encoding before selecting an implementation. Reuse the proven local rendering and worker principles from Daily Prompter only where they actually fit.
-- Keep pasted code on-device by default and never execute it.
-- Avoid watermarks, forced sign-in, deliberately degraded exports, and fake scarcity.
-- Treat templates, saved brand kits, cloud history, and cross-device libraries as optional later benefits rather than prerequisites for export.
+- Keep Code Animator as a candidate for the next tool, not a placeholder product shipped during the foundation revamp.
+- Do not advertise it as available, add a nonfunctional product page, or load speculative runtime code.
+- Preserve room in the product catalog, route conventions, design system, and feature boundaries so it can be validated and implemented later without restructuring the studio.
+- When it is selected for implementation, give it a separate evidence-backed plan covering its local input-to-preview-to-export contract, browser rendering research, privacy boundary, and practical export format.
 
 #### Shared multi-product foundation
 
@@ -146,15 +143,16 @@ Reposition Frameline from “a teleprompter product” to “a private creative 
 
 - Trial 1 and Trial 2 are complete.
 - The current public teleprompter flow has a known baseline that can be protected during the portfolio transition.
-- Daily Prompter and Code Animator have concise job statements that can be tested with creators before implementation scope is locked.
+- Daily Prompter has a concise job statement, known behavioral baseline, and protected automated tests before implementation scope is locked.
 
 ### Completion gate
 
 Trial 3 is complete when:
 
 - A new visitor can understand within the first screen that Frameline is a collection of creator tools, not the name of one teleprompter.
-- Daily Prompter and Code Animator each have a dedicated product page and a working, directly accessible tool.
-- Both tools complete their default core job without account creation, upload, watermark, or artificial output restriction.
+- Daily Prompter has a dedicated product page and a working, directly accessible tool.
+- Daily Prompter completes its default core job without account creation, upload, watermark, or artificial output restriction.
+- The studio catalog and route architecture can add a second product without changing the Daily Prompter URLs, global navigation, or shared foundation.
 - Existing teleprompter links and saved local data survive the user-facing rename.
 - Studio navigation, product discovery, metadata, responsive behavior, accessibility, reduced motion, and performance pass automated and manual checks.
 - Privacy and capability claims are accurate for each product, including real-device verification where browser media APIs are involved.
@@ -162,7 +160,7 @@ Trial 3 is complete when:
 
 ### Planning rule
 
-Do not implement Trial 3 from this roadmap alone. Create `triage_3.md` after reviewing this direction. That detailed plan must begin with documentation and product-evidence discovery, resolve the final names and URLs, define the Code Animator export contract, list exact file changes, and split the work into independently verifiable phases.
+Do not implement Trial 3 from this roadmap alone. Execute it from [`triage_3.md`](triage_3.md). That detailed plan begins with documentation and product-evidence discovery, resolves the launch names and URLs, lists exact file changes, and splits the work into independently verifiable phases. Code Animator requires its own later plan when it becomes an active product rather than a speculative placeholder.
 
 ## Trial 4 — Optional accounts, sync, and connected benefits
 

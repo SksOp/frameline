@@ -11,6 +11,21 @@ const nextConfig: NextConfig = {
   },
 
   allowedDevOrigins: ['e4f1-223-235-103-87.ngrok-free.app'],
+
+  async redirects() {
+    return [
+      {
+        source: '/daily-prompter',
+        destination: '/teleprompter',
+        permanent: true,
+      },
+      {
+        source: '/daily-prompter/app',
+        destination: '/teleprompter/app',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

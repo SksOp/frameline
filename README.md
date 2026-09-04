@@ -1,6 +1,14 @@
 # Frameline
 
-A private, client-side floating teleprompter for current Android Chrome. Script layout, video encoding, and the generated WebM stay on the device.
+Frameline is a local-first creator studio for focused tools that work without an account. Its first product, **Teleprompter**, is a private floating teleprompter for current Android Chrome. Script layout, video encoding, and the generated WebM stay on the device.
+
+## Routes
+
+- `/` — Frameline studio home
+- `/products` — the creator-tool collection
+- `/teleprompter` — Teleprompter product and support information
+- `/teleprompter/app` — the working teleprompter
+- `/daily-prompter` and `/daily-prompter/app` — permanent compatibility redirects
 
 ## Runtime
 

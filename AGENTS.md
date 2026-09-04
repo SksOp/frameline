@@ -12,20 +12,21 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Product boundary
 
-- Frameline is a local-first Android Chrome teleprompter. Script processing and generated video stay on the device.
-- Trial 1 has no accounts, API routes, Server Actions for product data, database, upload, analytics, or backend fallback.
+- Frameline is a local-first creator studio whose current available product is Teleprompter for Android Chrome. Script processing and generated video stay on the device.
+- Trial 3 has no accounts, API routes, Server Actions for product data, database, upload, analytics, or backend fallback.
 - Keep public routes server-rendered by default. Add client boundaries only around browser-dependent interaction.
 
 ## Component architecture
 
 - Read `design.md` before changing any user-facing UI or introducing a new UI primitive.
 - Treat `src/components/ui/` as the project-owned shadcn primitive catalog. Reuse and compose those primitives instead of implementing parallel buttons, dialogs, popovers, tooltips, or controls.
-- UI primitives are migrated on demand, not speculatively. Before using an unmarked file from `src/components/ui/`, migrate every visual and interactive state to `design.md` and add `// DESIGN SYSTEM: Migrated to the current design.md.` as the first line. A migrated primitive that depends on another primitive requires that dependency to be migrated and marked too.
+- Trial 3 resets and regenerates the full shadcn catalog. A generated primitive is approved for application use only after every supported visual and interactive state is migrated to `design.md` and `// DESIGN SYSTEM: Migrated to the current design.md.` is added as its first line. Dependencies of an approved primitive must be migrated and marked too.
 - Shared brand, interaction, surface, and status colors belong in `src/app/globals.css`. One-off illustration colors may stay as literals in tightly scoped CSS when a token would obscure rather than clarify the palette. Never repeat a recurring color literal across files.
-- Put product composites under `src/features/teleprompter/components/`, not in `components/ui`.
+- Put shared studio navigation, catalog, solutions, and public marketing composites under `src/features/studio/components/`. Put Teleprompter workspace composites under `src/features/teleprompter/components/`. Neither belongs in `components/ui`.
 - Keep `teleprompter-app.tsx` as a readable composition root. Extract independently testable panes, dialogs, controls, and action surfaces before they become monolithic.
 - Prefer explicit imports and ownership boundaries. Avoid barrel files that obscure client/server boundaries or introduce circular dependencies.
 - Keep shared design tokens in `src/app/globals.css`; keep feature-specific styling with the teleprompter feature.
+- Drive public product cards and navigation entries from the typed studio catalog. Coming-soon concepts must be labelled truthfully and must not receive fake routes, enabled launch controls, countdowns, waitlists, or availability metadata.
 
 ## State and effects
 
@@ -53,7 +54,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Verification
 
-- Run `npm run typecheck`, `npm test`, `npm run lint`, and `npx playwright test` for relevant changes.
-- Add unit coverage for pure state/rendering changes and desktop/mobile browser coverage for interaction changes.
+- Run `npm run typecheck`, `npm test`, `npm run lint`, and the production build for relevant Trial 3 changes.
+- Browser E2E files and configuration are explicitly deferred for Trial 3. Do not recreate or run Playwright coverage during this pass; retain unit coverage and use responsive screenshots for visual evidence.
 - Treat the production build and real Android Chrome checks as release gates; desktop emulation does not prove WebCodecs or PiP support on a phone.
 - Preserve unrelated user changes in a dirty worktree.

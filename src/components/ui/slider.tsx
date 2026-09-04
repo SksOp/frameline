@@ -1,7 +1,6 @@
 // DESIGN SYSTEM: Migrated to the current design.md.
 import { Slider as SliderPrimitive } from "@base-ui/react/slider"
-
-import { cn } from "@/lib/utils"
+import { cn } from "cn"
 
 function Slider({
   className,
@@ -15,11 +14,11 @@ function Slider({
     ? value
     : Array.isArray(defaultValue)
       ? defaultValue
-      : [value ?? defaultValue ?? min]
+      : [min, max]
 
   return (
     <SliderPrimitive.Root
-      className={cn("data-horizontal:w-full data-vertical:h-full", className)}
+      className={cn("data-horizontal:w-full data-vertical:h-full data-disabled:cursor-not-allowed", className)}
       data-slot="slider"
       defaultValue={defaultValue}
       value={value}
@@ -28,10 +27,10 @@ function Slider({
       thumbAlignment="edge"
       {...props}
     >
-      <SliderPrimitive.Control className="relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col">
+      <SliderPrimitive.Control className="relative flex min-h-11 w-full touch-none items-center select-none data-disabled:opacity-70 data-vertical:h-full data-vertical:min-h-40 data-vertical:w-11 data-vertical:flex-col">
         <SliderPrimitive.Track
           data-slot="slider-track"
-          className="relative grow overflow-hidden rounded-none border border-foreground bg-muted select-none data-horizontal:h-2 data-horizontal:w-full data-vertical:h-full data-vertical:w-2"
+          className="relative grow overflow-hidden rounded-full border border-border bg-surface-inset select-none data-horizontal:h-2 data-horizontal:w-full data-vertical:h-full data-vertical:w-2"
         >
           <SliderPrimitive.Indicator
             data-slot="slider-range"
@@ -42,8 +41,7 @@ function Slider({
           <SliderPrimitive.Thumb
             data-slot="slider-thumb"
             key={index}
-            index={index}
-            className="relative block size-4 shrink-0 rounded-[2px] border-2 border-foreground bg-[var(--fl-pink)] shadow-[2px_2px_0_var(--fl-ink)] transition-[transform,box-shadow,background] select-none after:absolute after:-inset-3 hover:-translate-y-0.5 hover:bg-[var(--fl-lime)] hover:shadow-[3px_3px_0_var(--fl-ink)] focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-ring active:translate-x-0.5 active:translate-y-0.5 active:shadow-none disabled:pointer-events-none disabled:opacity-50"
+            className="relative block size-5 shrink-0 rounded-full border-2 border-primary bg-surface-elevated shadow-(--shadow-sm) transition-[box-shadow,transform] duration-(--duration-fast) select-none after:absolute after:-inset-3 hover:scale-105 focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-95 data-disabled:border-disabled data-disabled:bg-disabled data-disabled:opacity-100"
           />
         ))}
       </SliderPrimitive.Control>

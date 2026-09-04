@@ -32,7 +32,7 @@ export function PreparedVideo({ videoRef, sessionState, loop, onPlay, onPause, o
   };
 
   return <section className={`prepared-output${sessionState === "ready" ? " is-ready" : ""}`} aria-labelledby="prepared-heading">
-    <div className="prepared-heading"><div><span className="pane-kicker">Prepared video</span><h3 id="prepared-heading">Playback check</h3></div><output aria-live="off">{formatTime(currentTime)} / {formatTime(duration)}</output></div>
+    <div className="prepared-heading"><div><span className="pane-kicker">Record</span><h3 id="prepared-heading">Playback check</h3></div><output aria-live="off">{formatTime(currentTime)} / {formatTime(duration)}</output></div>
     <video
       ref={videoRef} className="prepared-video" aria-label="Prepared teleprompter video" playsInline loop={loop}
       onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)}

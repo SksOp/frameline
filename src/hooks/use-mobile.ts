@@ -1,16 +1,16 @@
 import * as React from "react"
 
 const MOBILE_BREAKPOINT = 768
-const MOBILE_MEDIA_QUERY = `(max-width: ${MOBILE_BREAKPOINT - 1}px)`
+const MOBILE_QUERY = `(max-width: ${MOBILE_BREAKPOINT - 1}px)`
 
 function subscribeToMobileQuery(onStoreChange: () => void) {
-  const mediaQuery = window.matchMedia(MOBILE_MEDIA_QUERY)
+  const mediaQuery = window.matchMedia(MOBILE_QUERY)
   mediaQuery.addEventListener("change", onStoreChange)
   return () => mediaQuery.removeEventListener("change", onStoreChange)
 }
 
 function getMobileSnapshot() {
-  return window.matchMedia(MOBILE_MEDIA_QUERY).matches
+  return window.matchMedia(MOBILE_QUERY).matches
 }
 
 function getServerMobileSnapshot() {

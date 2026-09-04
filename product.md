@@ -1,4 +1,4 @@
-# Product specification: browser-based floating teleprompter
+# Product specification: Frameline / Teleprompter
 
 ## Status
 
@@ -11,7 +11,7 @@
 
 ## Product horizon
 
-The first release is deliberately a client-side utility: open the site, paste a script, configure it, and launch the floating teleprompter. It does not require an account or a backend.
+Frameline is a local-first creator studio. Its first product, Teleprompter, is deliberately a client-side utility: open the tool, paste a script, configure it, and launch the floating teleprompter. It does not require an account or a backend.
 
 The codebase must nevertheless be structured as the foundation of a broader creator product. Later releases should let creators:
 
@@ -381,9 +381,9 @@ Future rich scripts may support:
 
 The persisted format should be validated, deterministic, and independent of React components. Do not store arbitrary HTML or serialized editor state as the canonical script. The encoder should consume a normalized render plan derived from the document model, so richer editing does not require replacing the video pipeline.
 
-## Landing page direction
+## Studio and product-page direction
 
-The initial landing page should lead directly into the no-account workflow and make the current value concrete:
+The Frameline studio home presents a focused collection without implying products that do not exist. The separate Teleprompter page leads directly into the no-account workflow and makes the current value concrete:
 
 1. Paste a script.
 2. Prepare it privately on the phone.
@@ -391,7 +391,7 @@ The initial landing page should lead directly into the no-account workflow and m
 
 It should state that scripts and generated video stay on the device for the MVP. It must also set expectations that Android Chrome is the initial supported platform and that the floating window is an opaque system Picture-in-Picture video, not a transparent overlay.
 
-Add a restrained **Coming next** section after the working product, not before it. It may preview:
+Future products and capabilities belong in documented direction, not empty catalog cards or promises on the live studio. Potential later work includes:
 
 - A personal script library with sign-in and cross-device sync
 - Imports from the tools creators already use

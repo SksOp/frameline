@@ -11,7 +11,7 @@ type ScriptPaneProps = {
 export function ScriptPane({ text, draftReady, persistenceError, words, duration, onTextChange, onClear }: ScriptPaneProps) {
   return <section className="app-pane script-pane" aria-labelledby="script-heading">
     <div className="pane-toolbar">
-      <div><span className="pane-kicker">Script</span><h2 id="script-heading">Your words</h2></div>
+      <div><span className="pane-kicker">Write</span><h2 id="script-heading">Your words</h2></div>
       <Button className="tool-button" variant="ghost" onClick={() => void onClear()} disabled={!text} aria-label="Clear script"><Trash2 /><span>Clear</span></Button>
     </div>
     <label className="sr-only" htmlFor="script">Your script</label>

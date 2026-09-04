@@ -1,129 +1,177 @@
-# Frameline design system
+# Frameline Human Canvas design system
 
-This file is the source of truth for Frameline's visual language. The approved direction is energetic, graphic, creator-first, and intentionally unlike generic productivity software. It pairs acid color, heavy black structure, playful movement, and concise copy with a calm, trustworthy product workflow.
+This is the visual and interaction source of truth for Frameline Trial 3, including Revision 2. **Human Canvas** replaces the former neo-brutalist system with a warm, tactile creator brand and a quieter product system. The `/3` concept and `.triage/human-canvas-selected.jpg` are direction references; this document is authoritative where they differ from behavior or accessibility. **Frameline** is the studio and **Teleprompter** is the available product; never use the former mistranscribed product name in current UI or documentation.
 
-## Design principles
+## Principles and intensity
 
-1. **Creator energy, utility discipline.** Marketing can be loud; the teleprompter must remain focused. Both surfaces share color, type, geometry, and motion, but the product workspace uses them with less visual noise.
-2. **Confidence over polish theater.** Prefer bold hierarchy, useful labels, visible controls, and immediate feedback over glassy decoration or stacked cards.
-3. **Physical digital objects.** Controls should feel pressable. Use hard offset shadows, clear borders, small translations, and immediate active states.
-4. **Motion communicates state.** Continuous motion is reserved for expressive marketing moments and live status. Product motion should explain a transition, response, or system state.
-5. **Private by default.** Privacy language is direct and specific: on-device, no account, no upload. Never imply unsupported security or storage behavior.
-6. **Phone-first, not phone-only.** Every control must work at narrow portrait widths, in landscape, at desktop sizes, with browser chrome changes, and at 200% text zoom.
+1. Be human, warm, specific, and honest. Say no account, local saving, and on-device processing only where technically true.
+2. Marketing may be expressive and compositional; product UI stays calm and task-led. Both share tokens, type, geometry, voice, and motion.
+3. Creator content is the object. Cards contain a meaningful step, object, tip, or action—not every region.
+4. Motion explains relationships or confirms state; it must not compete with product work.
+5. Design phone-first for narrow portrait, landscape, desktop, safe areas, changing browser chrome, and 200% zoom.
 
-## Visual character
+Marketing (`/`, `/products`, `/solutions`, `/teleprompter`) may use the full palette, editorial display type, overlapping shapes, gentle rotations up to 4 degrees, and buoyant response motion. It must communicate Frameline's focused creator-tool promise, no-account use, local privacy posture, and available Teleprompter within the first viewport. Interactive demonstrations need pointer, keyboard, touch, reduced-motion, and meaningful static states; they must not import the tool runtime.
 
-The system is neo-brutalist without becoming hostile: thick ink borders, squared or lightly rounded geometry, offset shadows, saturated blocks, oversized display type, and mono utility labels. Avoid beige editorial minimalism, generic SaaS gradients, excessive glassmorphism, and decorative card stacks.
+Teleprompter uses the same system at lower intensity. Coral identifies primary action/current step; sage, gold, and editorial type are accents. The script and preview remain dominant. Use **Write → Practice → Record** language without changing the established Trial 3 workspace UX or layout.
 
-### Core palette
+## Exact foundation tokens
 
-Core colors are semantic variables in `src/app/globals.css`:
+Define these exact properties in light-mode `:root` in `src/app/globals.css`. Components consume semantic roles, never copied values.
 
-- `--fl-ink`: near-black structure, text, and dark surfaces.
-- `--fl-lime`: the primary brand field and high-energy action color.
-- `--fl-pink`: expressive accent and hard-shadow color.
-- `--fl-violet`: secondary accent, focus, and selected-state color.
-- `--fl-paper`: low-noise workspace and content background.
-- `--fl-white`: high-contrast text and controls on dark or violet surfaces.
-- `--fl-positive`, `--fl-warning`, and `--fl-danger`: product status colors.
+| Token | Value | Use |
+| --- | --- | --- |
+| `--canvas` | `#f4ead8` | Global warm canvas |
+| `--surface` | `#fffaf0` | Content/control surface |
+| `--surface-elevated` | `#fffdf8` | Dialogs, menus, raised objects |
+| `--surface-inset` | `#eadbc3` | Wells, groups, tracks |
+| `--surface-strong` | `#e7d7bd` | Section/product surround |
+| `--text-primary` | `#28251f` | Default text/icons |
+| `--text-secondary` | `#625c51` | Supporting normal text |
+| `--text-subtle` | `#756e61` | Metadata/large secondary labels |
+| `--text-inverted` | `#fffaf1` | Text on strong dark fills |
+| `--border` | `#c9b99f` | Control/container boundary |
+| `--divider` | `#d5c6af` | Quiet separator |
+| `--brand-coral` | `#df5d37` | Recognizable brand/large field |
+| `--brand-coral-strong` | `#a83b20` | Accessible link/primary control |
+| `--brand-coral-soft` | `#f4c5b3` | Selected/highlight surface |
+| `--accent-sage` | `#8eb888` | Supporting brand field |
+| `--accent-sage-strong` | `#47764b` | Positive accessible text |
+| `--accent-sage-soft` | `#d7e5d2` | Positive/secondary surface |
+| `--accent-gold` | `#f0bd50` | Warm illustrative highlight |
+| `--accent-gold-strong` | `#775515` | Accessible warning text |
+| `--accent-gold-soft` | `#f8e2aa` | Warning/highlight surface |
+| `--focus` | `#7138a8` | Focus-visible ring |
+| `--positive` / `--positive-surface` | `#47764b` / `#d7e5d2` | Success/saved |
+| `--warning` / `--warning-surface` | `#775515` / `#f8e2aa` | Warning/stale |
+| `--danger` / `--danger-surface` | `#a7352b` / `#f5d3ce` | Error/destructive |
+| `--informative` / `--informative-surface` | `#365f78` / `#d8e8ef` | Product information |
+| `--disabled` / `--disabled-foreground` | `#b7aa96` / `#625c51` | Disabled control/label |
+| `--overlay` | `rgb(40 37 31 / 0.48)` | Modal backdrop |
 
-Use shared variables for brand colors, interactive states, surfaces, text, borders, focus, and product status. A small one-off illustration shade may remain a literal inside tightly scoped CSS when promoting it to a token would make the palette harder to understand. Do not duplicate a recurring color literal across files.
+`--brand-coral` is not automatically accessible behind small cream text; default primary controls use `--brand-coral-strong`. Map shadcn roles (`--background`, `--foreground`, `--card`, `--popover`, `--primary`, `--secondary`, `--muted`, `--accent`, `--destructive`, `--input`, `--ring`, and foreground roles) to these properties—never a second palette. Dark mode is outside Trial 3 scope: set `color-scheme: light` and do not ship a partial `.dark` mapping.
 
-### Typography
+### Type
 
-- **Display:** `Inter Variable`, very heavy (850–1000), tight tracking, compact line height, often uppercase.
-- **Utility:** `Roboto Mono Variable`, 600–900, uppercase, short labels, metadata, counters, and status.
-- **Editorial accent:** `Newsreader Variable` only when a warmer human voice is useful; never as the dominant product UI face.
-- **Body:** `Inter Variable`, 450–700, readable line heights, sentence case.
+- `--font-display: "Newsreader Variable", Georgia, serif` for authored marketing display and rare product-step headings.
+- `--font-sans: "Inter Variable", Arial, sans-serif` for body, navigation, controls, and product UI.
+- `--font-mono: "Roboto Mono Variable", ui-monospace, monospace` for numeric, timing, and technical metadata only.
+- Display XL: `clamp(3.75rem, 9vw, 8rem)/0.88`, weight 560, tracking `-0.065em`.
+- Display: `clamp(2.75rem, 6vw, 5.5rem)/0.92`, weight 560, tracking `-0.05em`.
+- H1/H2/H3: `clamp(2rem,4vw,3.5rem)/1`, `clamp(1.5rem,2.5vw,2.25rem)/1.1`, `1.125rem/1.25`; weights 600/650/700.
+- Body large/body/small: `1.125rem/1.6`, `1rem/1.55`, `0.875rem/1.5`; weights 450/450/500.
+- Label and numeric/code: `0.8125rem/1.25` weight 700 and `0.8125rem/1.35` weight 650. Essential UI copy never falls below `0.75rem`.
 
-Headlines should feel authored. Use short phrases, hard line breaks, outline-to-fill treatments, or a controlled skew. Do not sacrifice legibility for novelty.
+### Spacing, shape, depth, motion
 
-### Geometry and depth
+- 4px scale: `--space-1`…`--space-12` = `0.25rem`, `0.5rem`, `0.75rem`, `1rem`, `1.25rem`, `1.5rem`, `2rem`, `2.5rem`, `3rem`, `4rem`, `5rem`, `6rem`.
+- `--content-gutter: clamp(1rem, 4vw, 4rem)`; `--content-max: 87.5rem`; `--target-min: 2.75rem`.
+- `--radius-sm: .625rem`; `--radius-md: .875rem`; `--radius-lg: 1.25rem`; `--radius-xl: 1.75rem`; `--radius-2xl: 2.25rem`; `--radius-pill: 999px`.
+- `--shadow-sm: 0 .25rem .875rem rgb(99 76 42 / .08)`; `--shadow-md: 0 .75rem 2rem rgb(99 76 42 / .12)`; `--shadow-lg: 0 1.5rem 3.75rem rgb(99 76 42 / .15)`.
+- `--duration-fast: 120ms`; `--duration-standard: 200ms`; `--duration-slow: 420ms`; `--ease-standard: cubic-bezier(.2,.8,.2,1)`; `--ease-buoyant: cubic-bezier(.34,1.56,.64,1)`.
 
-- Brand borders are usually 2–3px solid `--fl-ink`.
-- Primary marketing buttons and featured objects use hard offset shadows, normally 6–12px.
-- Product controls use smaller 3–5px offsets so the workspace stays compact.
-- Use square corners or 8–14px radii for most elements. Reserve pills for compact status and binary controls.
-- Avoid soft ambient shadows as the only depth cue. They may support, but not replace, the hard structural shadow.
+Use soft warm depth, one-pixel borders, and generous radii. Do not restore heavy black borders, hard offset shadows, acid fields, universal uppercase, or rigid shadow-press effects.
 
-## Interaction and motion
+## First-viewport composition and motion
 
-### Required control behavior
+The landing page begins with the Frameline studio promise, not a Teleprompter-only headline. Teleprompter may be the concrete proof point, but the primary action leads to `/products`; direct access to `/teleprompter/app` is secondary. The first viewport should reveal the relationship between studio promise, available product, and future focused tools without requiring scroll, hover, or animation to understand it.
 
-Every actionable control needs visible default, hover, focus-visible, active, and disabled states.
+- Use one coordinated entrance sequence at most: editorial headline, supporting copy, then product objects. Keep the total reveal brief and interruptible.
+- Prefer opacity and small translate/scale changes. Do not animate layout dimensions, create continuous parallax, or make text wait behind long choreography.
+- Pointer movement may gently respond in an illustrative canvas only. It must not move controls, capture the pointer, or run on coarse/touch pointers.
+- The static server-rendered state is complete. Under reduced motion, render that final state immediately and remove auto-cycling, floating, parallax, and scroll-linked transforms.
+- Avoid expensive blur, filters, and large continuously repainted layers on phones. Motion is a hierarchy aid, not ambient decoration.
 
-- **Hover:** translate 2–4px against the shadow, change accent, or move the icon.
-- **Active:** compress the hard shadow and move toward it, creating a pressed effect.
-- **Focus-visible:** use a high-contrast violet or lime outline with at least 3px thickness and an offset.
-- **Disabled:** keep labels readable, remove motion, and reduce contrast without making the control disappear.
-- **Touch targets:** at least 44×44 CSS pixels wherever practical.
+## Responsive sliding mega-navigation
 
-Hover is enhancement only. Essential content and actions must remain understandable without it.
+The shared studio header owns navigation across `/`, `/products`, `/solutions`, and `/teleprompter`. Keep the Frameline wordmark at the left with **Products** and **Solutions** immediately after it. The Teleprompter launch action may sit at the far edge, but must not displace the primary navigation.
 
-### Continuous motion
+The navigation frame uses the shared content gutter and a bounded wide maximum. It may be wider than page reading columns, but it must not stretch edge-to-edge indefinitely on large displays. The open panel spans the full width of that bounded frame so Products and Solutions feel like two views of one stable navigation surface.
 
-Marketing may use looping headline fills, slow object floats, scrolling marquees, and restrained geometric movement. Loops should have different durations to avoid mechanical synchronization. Pausing a marquee on hover is encouraged.
+### Desktop behavior
 
-The teleprompter workspace should not continuously move except for the actual scrolling preview, reading progress, preparation status, or another live state. Preview animation must pause during encoding.
+- Compose the project-owned shadcn `NavigationMenu`; migrate and mark it before use. Do not build a parallel menu/popover system.
+- Products and Solutions are buttons/triggers, not hover-only links. Click, `Enter`, or `Space` opens the requested view; pointer hover may preview/open only when it preserves predictable click and focus behavior.
+- Left/right arrow keys move between top-level triggers according to the primitive contract. `Escape` closes the panel and returns focus to its trigger. Tabbing enters the panel in DOM order and never crosses hidden content.
+- Products and Solutions share one broad panel container. Switching triggers slides/fades the inner view horizontally while the outer panel remains anchored; avoid height jumps by using a stable measured/minimum panel geometry.
+- Each entry includes a concise label and description. Product entries include an explicit **Available** or **Coming soon** status. An optional feature card is allowed only when it communicates real product information.
+- Outside pointer activation and focus leaving the navigation close it predictably. Opening one view closes the other; route changes close the entire menu.
 
-All nonessential animation must stop under `prefers-reduced-motion: reduce`. The underlying content must remain visible and usable.
+### Mobile behavior
 
-## Marketing surface
+- At the documented compact breakpoint, replace the desktop NavigationMenu interaction with the project-owned shadcn `Drawer`; migrate and mark it before use.
+- The menu trigger is a labelled 44px target. The drawer exposes Products and Solutions as tap-first disclosure sections, preserves the same information and availability labels, respects safe-area insets, and keeps the close control reachable.
+- Opening contains focus; closing or navigation restores focus appropriately. The body behind the drawer must not scroll or remain interactive.
+- Never render the desktop popup off-canvas and call it mobile navigation. Never require hover, a fine pointer, horizontal dragging, or a gesture-only close.
 
-- Lead with an assertive creator benefit, not a feature inventory.
-- The primary hero treatment is the approved “Talk like you mean it” outline-to-fill animation.
-- Use a graphic phone/teleprompter demonstration rather than stock photography.
-- Use an angled creator-use marquee to transition from hero to product explanation.
-- Feature cards may tilt and deepen their shadows on hover, but their information cannot depend on hover.
-- Copy should be contemporary without trying too hard: specific, concise, and useful. Avoid unexplained slang or promises the product cannot meet.
+At 200% zoom, the navigation must switch to the compact pattern before labels collide. The panel/drawer may scroll vertically within the viewport, but the document and panel must not gain horizontal overflow. Long product names and descriptions wrap; no content is clipped. Reduced motion replaces the shared sliding transition with an immediate view change or a short opacity change.
 
-## Teleprompter surface
+## Product rail and honest availability
 
-The workspace keeps its existing workflow and information architecture:
+The landing page may use a horizontally scrollable product rail; `/products` may use the rail or a selected-product treatment. Both render from the typed catalog and distinguish Teleprompter from the working concepts **Code Animator**, **GIF/MP4 Extractor**, and **Icon Animation Extractor**.
 
-1. Write or paste the script.
-2. Preview and tune its reading behavior.
-3. Prepare the video locally.
-4. Launch Picture-in-Picture and switch to the camera.
+- Teleprompter is first, visibly **Available**, and exposes real product and launch links.
+- Unavailable concepts are visibly **Coming soon**. They are informational articles, not disabled controls; they have no fake product route, launch button, countdown, waitlist, pricing, or structured-data claim of availability.
+- Every card has a product-specific visual motif, short job statement, and status. Do not reuse Teleprompter phone artwork for unrelated products.
+- Use native horizontal scrolling with `scroll-snap` as progressive enhancement. Cards remain reachable by touch, trackpad, wheel/shift-wheel where supported, and keyboard focus. If previous/next buttons are present, label them and disable them truthfully at the bounds.
+- Preserve a partial next-card cue without shrinking text or touch targets. At narrow widths, one primary card is legible at a time; at wide widths, show more cards without turning the rail into an edge-to-edge strip.
+- Do not auto-advance. Selection cannot depend on drag, hover, or color. At 200% zoom, cards may stack or retain a vertically reachable snap rail without document-level horizontal overflow.
 
-Visual migration must not change reducer actions, persistence, preparation behavior, encoding, playback, keyboard behavior, or accessibility semantics.
+`/solutions` connects the studio principles—focused, private, client-side where technically possible, immediate/no-account access, and a real free path—to available or planned products. Claims must be qualified per product. A concept card may illustrate direction, but cannot imply that unavailable software exists.
 
-- Use `--fl-paper` as the calm base and reserve lime, pink, and violet for navigation, selection, focus, and primary actions.
-- Keep the script and preview as the dominant panes; do not bury them inside decorative cards.
-- The dock remains reachable without scrolling and uses clear selected, stale, generating, ready, and disabled states.
-- Settings use compact bordered rows, strong output values, tactile sliders/switches, and the same responsive dialog/drawer behavior.
-- The preview's user-selected text/background colors remain authoritative and must not be replaced by brand colors.
+## Production footer
 
-## UI primitives and migration protocol
+The footer is a purposeful studio endpoint rather than a minimal line of links. It contains:
 
-`src/components/ui/` is the project-owned primitive catalog. Only migrate a primitive when a real product surface begins using it. Do not restyle the entire catalog speculatively.
+- a concise Frameline statement and the current truthful privacy/no-account boundary;
+- a **Products** group with Teleprompter marked Available and the three future concepts marked Coming soon as plain text unless real routes exist;
+- a **Solutions** group linking to useful anchors or sections that actually exist;
+- a small studio/navigation group for Home, Products, Solutions, and source, status, privacy, support, or legal destinations only when those destinations are real;
+- copyright, licensing, and source-availability language only after the exact terms and destination are verified.
 
-The primitives currently migrated for the marketing and teleprompter surfaces are:
+Use semantic grouped navigation with visible headings, comfortable touch targets, logical reading order, and wrapping columns. On phones it stacks without accordions unless collapsing materially improves a long real footer. Do not invent customer logos, social accounts, contact channels, enterprise claims, policy pages, or filler links to make it look established.
 
-- `alert.tsx`
-- `badge.tsx`
-- `button.tsx`
-- `dialog.tsx`
-- `drawer.tsx`
-- `hover-card.tsx`
-- `native-select.tsx`
-- `slider.tsx`
-- `switch.tsx`
-- `textarea.tsx`
+## Component state contract
 
-Every migrated primitive must begin with this exact marker:
+Every applicable primitive implements: default; subtle hover (color/elevation or max 2px lift); 3px `--focus` focus-visible ring with 2px offset; active/pressed without layout shift; selected/open/checked indicated by more than color; disabled with readable label and no motion; invalid with danger icon/text and `aria-describedby`; loading with stable dimensions, label context, `aria-busy`, and duplicate activation prevention.
+
+Primary buttons use strong coral and are reserved for a region's main action. Secondary uses surface plus border. Ghost retains visible hover/focus surfaces. Destructive uses danger, never brand coral. Icon-only controls require accessible names and practical 44px targets.
+
+Inputs, textarea, select, slider, switch, dialog, drawer, popover, tooltip/hover help, alert, and menu share these states. Dialog/drawer focus is contained and restored. Desktop hover help has a focus path and touch tap/click equivalent. Status never depends on color alone.
+
+## Runtime, responsive, and accessibility invariants
+
+The visual migration must not change reducer actions, derived state, persistence, preview timing/layout/progress, canvas painting, `VideoFrame` creation, worker/encoding ownership, timestamps, queues, keyframes, transfer/cleanup, signatures/stale rules, cancellation, playback, Picture-in-Picture, keyboard behavior, focus order, accessible names, dialog/drawer behavior, or live regions. Playback-only speed/looping still do not recompile; preview still pauses during encoding.
+
+User-selected preview foreground/background colors remain authoritative in preview and generated frames. Brand tokens never replace them. Keep saved, stale, preparing, ready, unsupported, failed, and cancelled states explicit.
+
+Test from 320px narrow portrait through landscape and desktop. Respect safe-area insets; keep primary actions reachable; reflow at 200% zoom without clipping or two-dimensional scrolling. Preserve semantic DOM order. Meet WCAG AA contrast for text, labels, focus, and status. Hover is enhancement only. Under `prefers-reduced-motion: reduce`, remove transforms, parallax, auto-cycling, and nonessential transitions while retaining all content and states.
+
+## CSS, assets, and ownership
+
+Shared color, spacing, radius, elevation, and motion values belong in `src/app/globals.css`. Reusable states belong in shadcn variants. Feature CSS may own complex responsive composition, safe-area geometry, canvas/video layout, and keyframes, but must consume global tokens and never reach into primitive internals.
+
+No component presentation may use repeated literal colors/values, arbitrary utilities when a token exists, undiscoverable dynamic class strings, or inline `style` props. A genuinely one-off illustration literal is allowed only when documented beside its use and not repeated.
+
+The sole inline-style exception is Next.js `ImageResponse` social artwork. Keep recurring social colors in a typed TypeScript palette exactly synchronized with CSS tokens. Update Open Graph artwork, icons, manifest theme color, and visible brand surfaces; none may retain neo-brutalism.
+
+## Full-catalog shadcn reset
+
+Trial 3 resets the whole project-owned catalog:
+
+1. Preserve the recorded recovery checkpoint and import inventory.
+2. Delete `src/components/ui/` in full.
+3. Run exactly `npm exec shadcn -- add --all --overwrite --yes` at repository root.
+4. Make every generated primitive token-compatible; prioritize complete state review for live consumers/dependencies.
+5. Add this exact first-line marker to every approved primitive:
 
 ```ts
 // DESIGN SYSTEM: Migrated to the current design.md.
 ```
 
-An unmarked primitive is not migrated. Before using one in application code, migrate all of its visual and interactive states to this guide, add the marker, and verify it in the consuming surface. When a migrated primitive imports another primitive, that dependency must also be migrated and marked.
+An unmarked primitive is generated but not approved for application use. Before a live import, migrate all supported states and dependencies, then mark each. Product composites belong in feature directories, never `src/components/ui/`.
 
-## Verification checklist
+## Trial 3 verification
 
-- Verify narrow portrait, landscape, desktop, browser chrome changes, and 200% text zoom.
-- Verify keyboard focus, pointer hover/press, touch targets, disabled states, and screen-reader labels.
-- Verify reduced motion.
-- Verify that the primary product actions stay reachable.
-- Verify that script persistence, settings, preview timing, video preparation, playback, cancellation, and Picture-in-Picture behavior remain unchanged.
-- Run typecheck, unit tests, lint, Playwright tests, and the production build. Real Android Chrome remains the release gate for WebCodecs and Picture-in-Picture.
+Verify tokens/primitives, then public and product surfaces at narrow portrait, landscape, desktop, safe-area/chrome changes, 200% zoom, keyboard-only, touch, reduced motion, disabled, invalid, and loading states. Run typecheck, unit tests, lint, and production build; capture responsive screenshots.
+
+Browser E2E files/configuration are explicitly deferred and removed for Trial 3; do not run or recreate Playwright coverage. Final hands-on Teleprompter and real Android Chrome verification belongs to the user and is a handoff, not an automated guarantee.

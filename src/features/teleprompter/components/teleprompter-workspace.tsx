@@ -22,7 +22,7 @@ export function TeleprompterWorkspace() {
       className={`teleprompter-root workspace app-shell ${resolvedTheme === 'dark' ? 'dark' : ''}`}
       data-theme={resolvedTheme}
     >
-      <h1 className="sr-only">Frameline teleprompter</h1>
+      <h1 className="sr-only">Teleprompter workspace</h1>
       <AppHeader
         words={derived.words}
         duration={derived.duration}

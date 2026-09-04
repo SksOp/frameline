@@ -25,8 +25,9 @@ export function AppHeader({
   const isDark = resolvedTheme === 'dark';
   return (
     <header className="app-header">
-      <Link className="wordmark" href="/">
-        Frameline
+      <Link className="wordmark" href="/teleprompter" aria-label="Frameline">
+        <span>Frameline</span>
+        <small aria-hidden="true">Teleprompter</small>
       </Link>
       <div className="app-header-meta">
         <span>{words} words</span>
