@@ -63,7 +63,10 @@ test.describe('Dark mode theme support', () => {
 
   test('theme can be adjusted from Tune settings dialog', async ({ page }) => {
     await page.goto('/teleprompter');
-    await page.getByRole('button', { name: /Tune|Settings/i }).first().click();
+    await page
+      .getByRole('button', { name: /Tune|Settings/i })
+      .first()
+      .click();
 
     const appearanceSelect = page.getByLabel('Appearance');
     await expect(appearanceSelect).toBeVisible();
