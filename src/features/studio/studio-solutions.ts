@@ -20,7 +20,7 @@ export const studioSolutions = [
     description: "No dashboard maze or suite-sized learning curve. Each product starts with a specific creative task.",
     evidence: "Teleprompter is built around one path: write, practice, record.",
     iconKind: "focus",
-    relatedProductSlugs: ["teleprompter", "code-animator", "gif-mp4-extractor", "icon-animation-extractor"],
+    relatedProductSlugs: ["teleprompter", "code-animator", "workflow-animator"],
   },
   {
     slug: "private",
@@ -29,7 +29,7 @@ export const studioSolutions = [
     description: "We collect as little as the job allows and explain each product's privacy boundary before you use it.",
     evidence: "Teleprompter does not upload scripts or generated prompt video.",
     iconKind: "shield",
-    relatedProductSlugs: ["teleprompter", "gif-mp4-extractor"],
+    relatedProductSlugs: ["teleprompter"],
   },
   {
     slug: "client-side",
@@ -38,7 +38,7 @@ export const studioSolutions = [
     description: "When browser capabilities make it practical, processing happens where your work already is: on your device.",
     evidence: "Teleprompter currently renders and encodes in the browser; future tools are still directions, not technical promises.",
     iconKind: "device",
-    relatedProductSlugs: ["teleprompter", "code-animator", "gif-mp4-extractor", "icon-animation-extractor"],
+    relatedProductSlugs: ["teleprompter", "code-animator", "workflow-animator"],
   },
   {
     slug: "immediate",

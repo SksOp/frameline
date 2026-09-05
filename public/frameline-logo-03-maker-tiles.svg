@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Frameline maker tiles logo concept</title>
+  <desc id="desc">Three rounded creator tiles orbit an open center, combining a frame, a timeline, and an export spark.</desc>
+  <rect width="512" height="512" rx="128" fill="#f4ead8"/>
+  <rect x="91" y="91" width="146" height="146" rx="42" fill="#a83b20" transform="rotate(-4 164 164)"/>
+  <path d="m148 133 54 31-54 31z" fill="#fffaf0"/>
+  <rect x="275" y="92" width="146" height="146" rx="42" fill="#8eb888" transform="rotate(4 348 165)"/>
+  <path d="M315 159h66M315 188h42" fill="none" stroke="#28251f" stroke-width="18" stroke-linecap="round"/>
+  <rect x="183" y="275" width="146" height="146" rx="42" fill="#f0bd50" transform="rotate(3 256 348)"/>
+  <path d="M256 310v76M218 348h76" fill="none" stroke="#28251f" stroke-width="20" stroke-linecap="round"/>
+  <circle cx="256" cy="256" r="29" fill="#28251f"/>
+</svg>

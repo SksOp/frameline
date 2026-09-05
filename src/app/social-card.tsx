@@ -9,7 +9,15 @@ export function SocialCard() {
       <div style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", zIndex: 2 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 13, background: color.coralStrong, color: color.textInverted, fontSize: 25, fontWeight: 800 }}>F</div>
+            <svg aria-hidden="true" width="42" height="42" viewBox="0 0 512 512">
+              <rect width="512" height="512" rx="128" fill={color.canvas} />
+              <path d="M108 218v-66c0-24 20-44 44-44h72" fill="none" stroke={color.coralStrong} strokeWidth="34" strokeLinecap="round" />
+              <path d="M288 108h72c24 0 44 20 44 44v66" fill="none" stroke={color.coralStrong} strokeWidth="34" strokeLinecap="round" />
+              <path d="M404 294v66c0 24-20 44-44 44h-72" fill="none" stroke={color.coralStrong} strokeWidth="34" strokeLinecap="round" />
+              <path d="M224 404h-72c-24 0-44-20-44-44v-66" fill="none" stroke={color.coralStrong} strokeWidth="34" strokeLinecap="round" />
+              <circle cx="256" cy="256" r="88" fill={color.textPrimary} />
+              <path d="M256 190c5 39 21 56 60 66-39 10-55 27-60 66-5-39-21-56-60-66 39-10 55-27 60-66z" fill={color.surface} />
+            </svg>
             <div style={{ display: "flex", fontSize: 25, fontWeight: 750, letterSpacing: "-0.04em" }}>Frameline</div>
           </div>
           <div style={{ display: "flex", padding: "9px 16px", border: `2px solid ${color.border}`, borderRadius: 999, color: color.textSecondary, fontSize: 15, fontWeight: 700, letterSpacing: "0.04em" }}>CREATOR STUDIO</div>

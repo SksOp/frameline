@@ -1,3 +1,4 @@
+// DESIGN SYSTEM: Migrated to the current design.md.
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
 import { cn } from "cn"
 import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
@@ -16,7 +17,7 @@ function AccordionItem({ className, ...props }: AccordionPrimitive.Item.Props) {
   return (
     <AccordionPrimitive.Item
       data-slot="accordion-item"
-      className={cn("not-last:border-b", className)}
+      className={cn("not-last:border-b not-last:border-divider", className)}
       {...props}
     />
   )
@@ -32,7 +33,7 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "group/accordion-trigger relative flex flex-1 items-start justify-between rounded-lg border border-transparent py-2.5 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:after:border-ring aria-disabled:pointer-events-none aria-disabled:opacity-50 **:data-[slot=accordion-trigger-icon]:ml-auto **:data-[slot=accordion-trigger-icon]:size-4 **:data-[slot=accordion-trigger-icon]:text-muted-foreground",
+          "group/accordion-trigger relative flex min-h-11 flex-1 items-center justify-between gap-3 rounded-lg border border-transparent px-2 py-2.5 text-left text-sm font-bold transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-(--ease-standard) outline-none hover:bg-surface-inset focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:bg-brand-coral-soft aria-expanded:bg-brand-coral-soft aria-disabled:pointer-events-none aria-disabled:border-disabled aria-disabled:bg-disabled aria-disabled:text-disabled-foreground aria-disabled:[&_svg]:text-disabled-foreground **:data-[slot=accordion-trigger-icon]:ml-auto **:data-[slot=accordion-trigger-icon]:size-4 **:data-[slot=accordion-trigger-icon]:text-muted-foreground",
           className
         )}
         {...props}
@@ -53,7 +54,7 @@ function AccordionContent({
   return (
     <AccordionPrimitive.Panel
       data-slot="accordion-content"
-      className="overflow-hidden text-sm data-open:animate-accordion-down data-closed:animate-accordion-up"
+      className="overflow-hidden text-sm data-open:animate-accordion-down data-closed:animate-accordion-up motion-reduce:animate-none"
       {...props}
     >
       <div

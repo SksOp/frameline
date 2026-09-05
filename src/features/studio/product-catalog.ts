@@ -1,5 +1,5 @@
 export type StudioSolutionTag = "focused" | "private" | "client-side" | "immediate" | "free";
-export type ProductArtKind = "prompt" | "code" | "clip" | "icon-motion";
+export type ProductArtKind = "prompt" | "code" | "workflow";
 
 type StudioProductBase = Readonly<{
   slug: string;
@@ -70,26 +70,15 @@ export const studioProducts: readonly StudioProduct[] = [
     direction: "Exploring a local input-to-preview-to-export workflow.",
   },
   {
-    slug: "gif-mp4-extractor",
-    name: "GIF / MP4 Extractor",
-    category: "Fast clip extraction",
-    summary: "Pull the moment you need into a shareable GIF or MP4.",
-    description: "A lightweight direction for extracting a useful clip without opening a heavyweight editor.",
+    slug: "workflow-animator",
+    name: "Workflow Animator",
+    category: "Motion for workflows",
+    summary: "Turn a product workflow into a clear, polished animation.",
+    description: "A focused direction for making product flows easier to show, teach, and share.",
     availability: "coming-soon",
-    artKind: "clip",
-    solutionTags: ["focused", "private", "client-side"],
-    direction: "Format support and export controls will be defined before implementation.",
-  },
-  {
-    slug: "icon-animation-extractor",
-    name: "Icon Animation Extractor",
-    category: "Reusable motion assets",
-    summary: "Isolate the icon motion you need for the rest of your workflow.",
-    description: "A focused direction for turning small interface motion into a reusable asset.",
-    availability: "coming-soon",
-    artKind: "icon-motion",
+    artKind: "workflow",
     solutionTags: ["focused", "client-side"],
-    direction: "Inputs, outputs, and browser support remain product-discovery questions.",
+    direction: "Capture, sequencing, and export details remain product-discovery questions.",
   },
 ];
 

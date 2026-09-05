@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { LockKeyhole, Moon, Settings2, Sun } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { FramelineLogo } from '@/features/studio/components/frameline-logo';
 import { formatDuration } from '../state/teleprompter-selectors';
 import type { ResolvedTheme, ThemePreference } from '../hooks/use-theme';
 
@@ -25,8 +26,8 @@ export function AppHeader({
   const isDark = resolvedTheme === 'dark';
   return (
     <header className="app-header">
-      <Link className="wordmark" href="/teleprompter" aria-label="Frameline">
-        <span>Frameline</span>
+      <Link className="wordmark text-[1.375rem] leading-none font-bold tracking-[-0.045em] no-underline" href="/teleprompter" aria-label="Frameline">
+        <FramelineLogo />
         <small aria-hidden="true">Teleprompter</small>
       </Link>
       <div className="app-header-meta">

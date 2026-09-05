@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Frameline story flow logo concept</title>
+  <desc id="desc">Three warm story lines flow toward a coral recording point, suggesting ideas becoming finished media.</desc>
+  <rect width="512" height="512" rx="128" fill="#fffaf0"/>
+  <path d="M104 158h168c58 0 104 47 104 104v8" fill="none" stroke="#28251f" stroke-width="30" stroke-linecap="round"/>
+  <path d="M104 256h120c42 0 76 34 76 76v20" fill="none" stroke="#8eb888" stroke-width="30" stroke-linecap="round"/>
+  <path d="M104 354h64c39 0 70-31 70-70v-12" fill="none" stroke="#f0bd50" stroke-width="30" stroke-linecap="round"/>
+  <circle cx="376" cy="270" r="72" fill="#df5d37"/>
+  <circle cx="376" cy="270" r="28" fill="#fffaf0"/>
+  <path d="M104 158h1M104 256h1M104 354h1" stroke="#28251f" stroke-width="38" stroke-linecap="round"/>
+</svg>

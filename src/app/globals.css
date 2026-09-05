@@ -179,10 +179,6 @@
 
 }
 
-[data-slot='bubble'] {
-  --muted: var(--surface-inset);
-}
-
 *,
 *::before,
 *::after {
@@ -212,22 +208,23 @@ button, a, select, input, textarea { -webkit-tap-highlight-color: transparent; }
   outline-offset: 2px;
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+/* Runtime preview motion. Keep these names and transforms synchronized with canvas timing. */
+@keyframes frameline-preview-scroll {
+  from {
+    transform: translateY(var(--preview-start-y));
+  }
+  to {
+    transform: translateY(var(--preview-end-y));
+  }
 }
 
-.wordmark {
-  font: 700 1.375rem/1 var(--font-sans);
-  letter-spacing: -0.045em;
-  text-decoration: none;
+@keyframes frameline-reading-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

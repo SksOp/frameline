@@ -23,7 +23,7 @@
   color: var(--text-primary);
   width: max-content;
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-2);
   transition:
     transform var(--duration-standard) var(--ease-standard),
@@ -338,23 +338,6 @@
     monospace;
   text-transform: uppercase;
 }
-@keyframes frameline-preview-scroll {
-  from {
-    transform: translateY(var(--preview-start-y));
-  }
-  to {
-    transform: translateY(var(--preview-end-y));
-  }
-}
-@keyframes frameline-reading-progress {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-
 .teleprompter-root .app-error {
   width: min(620px, 100%);
   margin: 16px auto 0;

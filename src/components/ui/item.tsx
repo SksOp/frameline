@@ -1,3 +1,4 @@
+// DESIGN SYSTEM: Migrated to the current design.md.
 import * as React from "react"
 import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
@@ -6,18 +7,22 @@ import { cn } from "cn"
 
 import { Separator } from "@/components/ui/separator"
 
-function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      role="list"
-      data-slot="item-group"
-      className={cn(
-        "group/item-group flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2",
-        className
-      )}
-      {...props}
-    />
-  )
+function ItemGroup({ className, render, ...props }: useRender.ComponentProps<"div">) {
+  return useRender({
+    defaultTagName: "div",
+    props: mergeProps<"div">(
+      {
+        role: "list",
+        className: cn(
+          "group/item-group flex w-full flex-col gap-4 has-data-[size=sm]:gap-2.5 has-data-[size=xs]:gap-2",
+          className
+        ),
+      },
+      props
+    ),
+    render,
+    state: { slot: "item-group" },
+  })
 }
 
 function ItemSeparator({
@@ -35,13 +40,13 @@ function ItemSeparator({
 }
 
 const itemVariants = cva(
-  "group/item flex w-full flex-wrap items-center rounded-lg border text-sm transition-colors duration-100 outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [a]:transition-colors [a]:hover:bg-muted",
+  "group/item flex w-full flex-wrap items-center rounded-lg border text-sm transition-[background-color,border-color,box-shadow] duration-(--duration-fast) ease-(--ease-standard) outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background aria-current:border-primary aria-current:bg-brand-coral-soft aria-disabled:pointer-events-none aria-disabled:border-disabled aria-disabled:bg-disabled aria-disabled:text-disabled-foreground data-[disabled]:pointer-events-none data-[disabled]:border-disabled data-[disabled]:bg-disabled data-[disabled]:text-disabled-foreground [a]:hover:bg-surface-inset [a]:active:bg-brand-coral-soft",
   {
     variants: {
       variant: {
         default: "border-transparent",
         outline: "border-border",
-        muted: "border-transparent bg-muted/50",
+        muted: "border-transparent bg-surface-inset",
       },
       size: {
         default: "gap-2.5 px-3 py-2.5",
@@ -130,7 +135,7 @@ function ItemTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="item-title"
       className={cn(
-        "line-clamp-1 flex w-fit items-center gap-2 text-sm leading-snug font-medium underline-offset-4",
+        "line-clamp-1 flex w-fit items-center gap-2 text-sm leading-snug font-bold underline-offset-4",
         className
       )}
       {...props}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Frameline open loop logo concept</title>
+  <desc id="desc">A continuous coral ribbon forms an open creative loop around a sage seed and a gold finishing point.</desc>
+  <rect width="512" height="512" rx="128" fill="#fffaf0"/>
+  <path d="M350 132c-85-51-194-5-222 89-27 94 41 187 138 187 57 0 109-34 132-84" fill="none" stroke="#a83b20" stroke-width="42" stroke-linecap="round"/>
+  <path d="M361 116c14-3 26 10 21 23l-25 67c-5 14-23 18-34 8l-52-48c-11-10-6-29 9-32z" fill="#df5d37"/>
+  <path d="M227 210c0-13 14-21 25-14l73 46c11 7 11 23 0 30l-73 46c-11 7-25-1-25-14z" fill="#8eb888"/>
+  <circle cx="398" cy="324" r="28" fill="#f0bd50"/>
+</svg>

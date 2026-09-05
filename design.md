@@ -10,7 +10,7 @@ This is the visual and interaction source of truth for Frameline Trial 3, includ
 4. Motion explains relationships or confirms state; it must not compete with product work.
 5. Design phone-first for narrow portrait, landscape, desktop, safe areas, changing browser chrome, and 200% zoom.
 
-Marketing (`/`, `/products`, `/solutions`, `/teleprompter`) may use the full palette, editorial display type, overlapping shapes, gentle rotations up to 4 degrees, and buoyant response motion. It must communicate Frameline's focused creator-tool promise, no-account use, local privacy posture, and available Teleprompter within the first viewport. Interactive demonstrations need pointer, keyboard, touch, reduced-motion, and meaningful static states; they must not import the tool runtime.
+Marketing (`/`, `/studio`, `/products`, `/solutions`, `/teleprompter`) may use the full palette, editorial display type, overlapping shapes, gentle rotations up to 4 degrees, and buoyant response motion. It must communicate Frameline's focused creator-tool promise, no-account use, local privacy posture, and available Teleprompter within the first viewport. Interactive demonstrations need pointer, keyboard, touch, reduced-motion, and meaningful static states; they must not import the tool runtime.
 
 Teleprompter uses the same system at lower intensity. Coral identifies primary action/current step; sage, gold, and editorial type are accents. The script and preview remain dominant. Use **Write → Practice → Record** language without changing the established Trial 3 workspace UX or layout.
 
@@ -73,7 +73,7 @@ Use soft warm depth, one-pixel borders, and generous radii. Do not restore heavy
 
 ## First-viewport composition and motion
 
-The landing page begins with the Frameline studio promise, not a Teleprompter-only headline. Teleprompter may be the concrete proof point, but the primary action leads to `/products`; direct access to `/teleprompter/app` is secondary. The first viewport should reveal the relationship between studio promise, available product, and future focused tools without requiring scroll, hover, or animation to understand it.
+The landing page begins with the Frameline studio promise, not a Teleprompter-only headline. Teleprompter may be the concrete proof point, but the primary action leads to `/studio`; product discovery through `/products` is secondary. The first viewport should reveal the relationship between studio promise, available product, and future focused tools without requiring scroll, hover, or animation to understand it.
 
 - Use one coordinated entrance sequence at most: editorial headline, supporting copy, then product objects. Keep the total reveal brief and interruptible.
 - Prefer opacity and small translate/scale changes. Do not animate layout dimensions, create continuous parallax, or make text wait behind long choreography.
@@ -83,7 +83,7 @@ The landing page begins with the Frameline studio promise, not a Teleprompter-on
 
 ## Responsive sliding mega-navigation
 
-The shared studio header owns navigation across `/`, `/products`, `/solutions`, and `/teleprompter`. Keep the Frameline wordmark at the left with **Products** and **Solutions** immediately after it. The Teleprompter launch action may sit at the far edge, but must not displace the primary navigation.
+The shared studio header owns navigation across `/`, `/studio`, `/products`, `/solutions`, and `/teleprompter`. Keep the Frameline wordmark at the left with **Products** and **Solutions** immediately after it. A quiet Studio link may sit at the far edge, but must not displace the primary navigation or compete with page-level actions.
 
 The navigation frame uses the shared content gutter and a bounded wide maximum. It may be wider than page reading columns, but it must not stretch edge-to-edge indefinitely on large displays. The open panel spans the full width of that bounded frame so Products and Solutions feel like two views of one stable navigation surface.
 
@@ -107,7 +107,7 @@ At 200% zoom, the navigation must switch to the compact pattern before labels co
 
 ## Product rail and honest availability
 
-The landing page may use a horizontally scrollable product rail; `/products` may use the rail or a selected-product treatment. Both render from the typed catalog and distinguish Teleprompter from the working concepts **Code Animator**, **GIF/MP4 Extractor**, and **Icon Animation Extractor**.
+The landing page may use a horizontally scrollable product rail; `/products` may use the rail or a selected-product treatment. Both render from the typed catalog and distinguish Teleprompter from the working concepts **Code Animator** and **Workflow Animator**.
 
 - Teleprompter is first, visibly **Available**, and exposes real product and launch links.
 - Unavailable concepts are visibly **Coming soon**. They are informational articles, not disabled controls; they have no fake product route, launch button, countdown, waitlist, pricing, or structured-data claim of availability.
@@ -148,11 +148,11 @@ Test from 320px narrow portrait through landscape and desktop. Respect safe-area
 
 ## CSS, assets, and ownership
 
-Shared color, spacing, radius, elevation, and motion values belong in `src/app/globals.css`. Reusable states belong in shadcn variants. Feature CSS may own complex responsive composition, safe-area geometry, canvas/video layout, and keyframes, but must consume global tokens and never reach into primitive internals.
+Use components over reusable CSS. Reuse and compose an approved project-owned shadcn primitive before creating a custom component. Static presentation belongs in token-backed Tailwind utilities on the owning component, and finite reusable states belong in primitive variants. Extract generic repeated behavior into a UI primitive or variant; extract repeated domain structure into a feature component.
 
-No component presentation may use repeated literal colors/values, arbitrary utilities when a token exists, undiscoverable dynamic class strings, or inline `style` props. A genuinely one-off illustration literal is allowed only when documented beside its use and not repeated.
+Do not add feature stylesheets, CSS Modules, reusable feature selectors, undiscoverable dynamic class-name fragments, or static inline `style` props. `src/app/globals.css` is limited to framework/theme imports, shared color, spacing, radius, elevation, and motion tokens, resets, document-wide accessibility behavior, and documented runtime keyframes. Components must not reach into primitive internals.
 
-The sole inline-style exception is Next.js `ImageResponse` social artwork. Keep recurring social colors in a typed TypeScript palette exactly synchronized with CSS tokens. Update Open Graph artwork, icons, manifest theme color, and visible brand surfaces; none may retain neo-brutalism.
+Inline styles are allowed only for values calculated at runtime or selected by the user, in the component that owns those values. Next.js `ImageResponse` social artwork is also exempt because it cannot consume the CSS theme; keep recurring social colors in a typed TypeScript palette exactly synchronized with CSS tokens. A genuinely one-off illustration literal is allowed only when documented beside its use and not repeated. No component presentation may copy repeated literal colors/values or use arbitrary utilities when a token exists. Update Open Graph artwork, icons, manifest theme color, and visible brand surfaces; none may retain neo-brutalism.
 
 ## Full-catalog shadcn reset
 

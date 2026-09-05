@@ -1,11 +1,22 @@
+// DESIGN SYSTEM: Migrated to the current design.md.
 "use client"
 
-import { useMemo } from "react"
+import { cloneElement, createContext, useContext, useId, useMemo } from "react"
+import { mergeProps } from "@base-ui/react/merge-props"
+import { useRender } from "@base-ui/react/use-render"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
+import { TriangleAlertIcon } from "lucide-react"
 
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+
+interface FieldContextValue {
+  errorId: string
+  invalid: boolean
+}
+
+const FieldContext = createContext<FieldContextValue | null>(null)
 
 function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   return (
@@ -30,7 +41,7 @@ function FieldLegend({
       data-slot="field-legend"
       data-variant={variant}
       className={cn(
-        "mb-1.5 font-medium data-[variant=label]:text-sm data-[variant=legend]:text-base",
+        "mb-1.5 font-bold data-[variant=label]:text-[0.8125rem] data-[variant=label]:leading-[1.25] data-[variant=legend]:text-base",
         className
       )}
       {...props}
@@ -72,17 +83,78 @@ const fieldVariants = cva(
 function Field({
   className,
   orientation = "vertical",
+  invalid = false,
+  errorId: errorIdProp,
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof fieldVariants>) {
-  return (
-    <div
-      role="group"
-      data-slot="field"
-      data-orientation={orientation}
-      className={cn(fieldVariants({ orientation }), className)}
-      {...props}
-    />
+}: React.ComponentProps<"div"> &
+  VariantProps<typeof fieldVariants> & {
+    errorId?: string
+    invalid?: boolean
+  }) {
+  const generatedErrorId = useId()
+  const errorId = errorIdProp ?? (props.id ? `${props.id}-error` : generatedErrorId)
+  const context = useMemo(
+    () => ({ errorId, invalid }),
+    [errorId, invalid]
   )
+
+  return (
+    <FieldContext.Provider value={context}>
+      <div
+        role="group"
+        data-slot="field"
+        data-orientation={orientation}
+        data-invalid={invalid || undefined}
+        className={cn(fieldVariants({ orientation }), className)}
+        {...props}
+      />
+    </FieldContext.Provider>
+  )
+}
+
+type FieldControlRenderProps = Pick<
+  React.AriaAttributes,
+  "aria-describedby" | "aria-invalid"
+>
+
+type FieldControlProps = Omit<
+  useRender.ComponentProps<"div">,
+  "aria-invalid" | "render"
+> & {
+  render: React.ReactElement<FieldControlRenderProps>
+}
+
+function FieldControl({
+  "aria-describedby": describedBy,
+  render,
+  ...props
+}: FieldControlProps) {
+  const field = useContext(FieldContext)
+  const renderedDescription = render.props["aria-describedby"]
+  const descriptionIds = Array.from(
+    new Set(
+      [renderedDescription, describedBy, field?.invalid ? field.errorId : null]
+        .flatMap((value) => value?.split(/\s+/) ?? [])
+        .filter(Boolean)
+    )
+  ).join(" ") || undefined
+  const invalid = field ? field.invalid || undefined : render.props["aria-invalid"]
+  const normalizedRender = cloneElement(render, {
+    "aria-describedby": descriptionIds,
+    "aria-invalid": invalid,
+  })
+
+  return useRender({
+    defaultTagName: "div",
+    props: mergeProps<"div">(
+      {
+        "aria-describedby": descriptionIds,
+        "aria-invalid": invalid,
+      },
+      props
+    ),
+    render: normalizedRender,
+  })
 }
 
 function FieldContent({ className, ...props }: React.ComponentProps<"div">) {
@@ -106,7 +178,7 @@ function FieldLabel({
     <Label
       data-slot="field-label"
       className={cn(
-        "group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50 has-data-checked:border-primary/30 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-muted/50 has-[>[data-slot=field]]:has-[:focus-visible]:border-ring has-[>[data-slot=field]]:has-[:focus-visible]:ring-3 has-[>[data-slot=field]]:has-[:focus-visible]:ring-ring/50 *:data-[slot=field]:p-2.5 dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10",
+        "group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:pointer-events-none group-data-[disabled=true]/field:text-disabled-foreground has-data-checked:border-primary has-data-checked:bg-brand-coral-soft has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border has-[>[data-slot=field]]:border-border has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-surface-inset has-[>[data-slot=field]]:has-[:focus-visible]:border-ring has-[>[data-slot=field]]:has-[:focus-visible]:ring-[3px] has-[>[data-slot=field]]:has-[:focus-visible]:ring-ring has-[>[data-slot=field]]:has-[:focus-visible]:ring-offset-2 has-[>[data-slot=field]]:has-[:focus-visible]:ring-offset-background *:data-[slot=field]:p-2.5",
         "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col",
         className
       )}
@@ -120,7 +192,7 @@ function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="field-label"
       className={cn(
-        "flex w-fit items-center gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50",
+        "flex w-fit items-center gap-2 text-sm font-bold group-data-[disabled=true]/field:text-disabled-foreground",
         className
       )}
       {...props}
@@ -178,9 +250,10 @@ function FieldError({
   children,
   errors,
   ...props
-}: React.ComponentProps<"div"> & {
+}: Omit<React.ComponentProps<"div">, "id"> & {
   errors?: Array<{ message?: string } | undefined>
 }) {
+  const field = useContext(FieldContext)
   const content = useMemo(() => {
     if (children) {
       return children
@@ -214,18 +287,24 @@ function FieldError({
 
   return (
     <div
+      className={cn(
+        "flex items-start gap-2 text-sm font-normal text-destructive [&>svg]:mt-0.5 [&>svg]:size-4 [&>svg]:shrink-0",
+        className
+      )}
+      {...props}
+      id={field?.errorId}
       role="alert"
       data-slot="field-error"
-      className={cn("text-sm font-normal text-destructive", className)}
-      {...props}
     >
-      {content}
+      <TriangleAlertIcon aria-hidden="true" />
+      <div>{content}</div>
     </div>
   )
 }
 
 export {
   Field,
+  FieldControl,
   FieldLabel,
   FieldDescription,
   FieldError,
