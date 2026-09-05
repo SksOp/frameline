@@ -23,8 +23,10 @@ import {
 import { useMediaQuery } from '../hooks/use-media-query';
 import type { ThemePreference } from '../hooks/use-theme';
 import { HORIZONTAL_PADDING_BOUNDS, type TeleprompterSettings } from '../types';
+import { PaneKicker, PaneTitle } from './pane-header';
 import { RangeControl } from './range-control';
 import { SettingWithInfo } from './setting-with-info';
+import { ToolButton } from './tool-button';
 
 type SettingUpdater = <Key extends keyof TeleprompterSettings>(
   key: Key,
@@ -38,6 +40,19 @@ type TuneDialogProps = {
   theme?: ThemePreference;
   onThemeChange?: (theme: ThemePreference) => void;
 };
+
+const surfaceClass =
+  'flex flex-col gap-0 overflow-hidden bg-surface-elevated p-0 shadow-(--shadow-lg)';
+const headerClass =
+  'block border-b border-divider bg-surface-strong px-[22px] py-[18px] max-[760px]:px-[18px] max-[760px]:pt-3 max-[760px]:pb-[13px]';
+const fieldsetClass = 'm-0 block border-0 py-5 max-[760px]:py-4';
+const legendClass =
+  'w-max rounded-full bg-brand-coral-soft px-[7px] py-[5px] font-mono text-[0.62rem] font-[850] text-brand-coral-strong';
+const gridClass =
+  'grid grid-cols-2 gap-x-[26px] gap-y-1 max-[760px]:grid-cols-1 max-[760px]:gap-0';
+const controlClass = 'min-w-0 border-b border-divider py-3.5';
+const controlLabelClass =
+  'mb-[9px] flex justify-between gap-2 text-[0.75rem] font-extrabold';
 
 export function TuneDialog({
   open,
@@ -64,14 +79,12 @@ export function TuneDialog({
   if (phone) {
     return (
       <Drawer open={open} onOpenChange={handleOpenChange} showSwipeHandle>
-        <DrawerContent className="teleprompter-surface settings-dialog settings-drawer">
-          <DrawerHeader className="settings-header">
+        <DrawerContent
+          className={`${surfaceClass} max-h-[88dvh] w-full rounded-t-xl border-x-0 border-b-0`}
+        >
+          <DrawerHeader className={headerClass}>
             <TuneHeading
-              title={
-                <DrawerTitle className="settings-title">
-                  Reading setup
-                </DrawerTitle>
-              }
+              title={<DrawerTitle render={<PaneTitle />}>Reading setup</DrawerTitle>}
               onClose={onClose}
             />
             <DrawerDescription className="sr-only">
@@ -88,16 +101,12 @@ export function TuneDialog({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
-        className="teleprompter-surface settings-dialog"
+        className={`${surfaceClass} max-h-[min(780px,calc(100dvh-40px))] w-[min(780px,calc(100%-40px))] max-w-[780px] rounded-xl sm:max-w-[780px]`}
         showCloseButton={false}
       >
-        <DialogHeader className="settings-header">
+        <DialogHeader className={headerClass}>
           <TuneHeading
-            title={
-              <DialogTitle className="settings-title">
-                Reading setup
-              </DialogTitle>
-            }
+            title={<DialogTitle render={<PaneTitle />}>Reading setup</DialogTitle>}
             onClose={onClose}
           />
           <DialogDescription className="sr-only">
@@ -119,20 +128,14 @@ function TuneHeading({
   onClose(): void;
 }) {
   return (
-    <div className="settings-heading-row">
+    <div className="flex items-center justify-between gap-4">
       <div>
-        <span className="pane-kicker">Tune</span>
+        <PaneKicker>Tune</PaneKicker>
         {title}
       </div>
-      <Button
-        className="tool-button icon-only"
-        size="icon-lg"
-        variant="ghost"
-        aria-label="Close settings"
-        onClick={onClose}
-      >
+      <ToolButton iconOnly aria-label="Close settings" onClick={onClose}>
         <X />
-      </Button>
+      </ToolButton>
     </div>
   );
 }
@@ -149,10 +152,10 @@ function TuneControls({
   onThemeChange?: (theme: ThemePreference) => void;
 }) {
   return (
-    <div className="settings-body">
-      <fieldset>
-        <legend>Reading</legend>
-        <div className="settings-grid">
+    <div className="overflow-auto bg-surface-elevated px-[22px] pt-1 pb-[22px] max-[760px]:px-[18px] max-[760px]:pt-0.5 max-[760px]:pb-[18px]">
+      <fieldset className={fieldsetClass}>
+        <legend className={legendClass}>Reading</legend>
+        <div className={gridClass}>
           <RangeControl
             label="Speed"
             value={settings.wordsPerMinute}
@@ -195,12 +198,13 @@ function TuneControls({
           />
         </div>
       </fieldset>
-      <fieldset>
-        <legend>Frame</legend>
-        <div className="settings-grid compact-settings">
-          <label className="control">
-            <span>Window shape</span>
+      <fieldset className={`${fieldsetClass} border-t border-divider`}>
+        <legend className={legendClass}>Frame</legend>
+        <div className={gridClass}>
+          <label className={controlClass}>
+            <span className={controlLabelClass}>Window shape</span>
             <NativeSelect
+              className="w-full"
               value={settings.aspectRatio}
               onChange={(event) =>
                 update(
@@ -214,9 +218,10 @@ function TuneControls({
               <NativeSelectOption value="4:3">Classic · 4:3</NativeSelectOption>
             </NativeSelect>
           </label>
-          <label className="control">
-            <span>Alignment</span>
+          <label className={controlClass}>
+            <span className={controlLabelClass}>Alignment</span>
             <NativeSelect
+              className="w-full"
               value={settings.alignment}
               onChange={(event) =>
                 update(
@@ -229,18 +234,20 @@ function TuneControls({
               <NativeSelectOption value="left">Left</NativeSelectOption>
             </NativeSelect>
           </label>
-          <label className="control color-control">
-            <span>Text color</span>
+          <label className={`${controlClass} flex items-center justify-between`}>
+            <span className={`${controlLabelClass} mb-0`}>Text color</span>
             <input
+              className="h-11 w-12 cursor-pointer rounded-sm border border-border bg-surface shadow-(--shadow-sm)"
               aria-label="Text color"
               type="color"
               value={settings.textColor}
               onChange={(event) => update('textColor', event.target.value)}
             />
           </label>
-          <label className="control color-control">
-            <span>Background</span>
+          <label className={`${controlClass} flex items-center justify-between`}>
+            <span className={`${controlLabelClass} mb-0`}>Background</span>
             <input
+              className="h-11 w-12 cursor-pointer rounded-sm border border-border bg-surface shadow-(--shadow-sm)"
               aria-label="Background color"
               type="color"
               value={settings.backgroundColor}
@@ -273,12 +280,13 @@ function TuneControls({
         </div>
       </fieldset>
       {onThemeChange && (
-        <fieldset>
-          <legend>App</legend>
-          <div className="settings-grid compact-settings">
-            <label className="control">
-              <span>Appearance</span>
+        <fieldset className={`${fieldsetClass} border-t border-divider`}>
+          <legend className={legendClass}>App</legend>
+          <div className={gridClass}>
+            <label className={controlClass}>
+              <span className={controlLabelClass}>Appearance</span>
               <NativeSelect
+                className="w-full"
                 value={theme ?? 'system'}
                 onChange={(event) =>
                   onThemeChange(event.target.value as ThemePreference)
@@ -302,9 +310,11 @@ function TuneControls({
 
 function SettingsFooter({ onClose }: { onClose(): void }) {
   return (
-    <footer className="settings-footer">
-      <span>Changes update the preview instantly.</span>
-      <Button className="button" onClick={onClose}>
+    <footer className="flex items-center justify-between gap-[18px] border-t border-divider bg-surface-strong px-[22px] py-3.5 max-[760px]:px-[18px] max-[760px]:pt-3 max-[760px]:pb-[calc(12px+env(safe-area-inset-bottom))] max-[480px]:justify-end">
+      <span className="font-mono text-[0.68rem] font-bold text-text-secondary max-[480px]:hidden">
+        Changes update the preview instantly.
+      </span>
+      <Button className="min-h-11 max-[480px]:w-full" onClick={onClose}>
         Done
       </Button>
     </footer>

@@ -1,7 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
-@import '../features/teleprompter/teleprompter.css';
 
 @theme inline {
   --font-display: var(--font-display);
@@ -179,33 +178,36 @@
 
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+/* Document resets stay in the base layer so component utilities can still win. */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-html {
-  min-width: 20rem;
-  scroll-behavior: smooth;
-  background: var(--canvas);
-}
+  html {
+    min-width: 20rem;
+    scroll-behavior: smooth;
+    background: var(--canvas);
+  }
 
-body {
-  margin: 0;
-  color: var(--text-primary);
-  background: var(--canvas);
-  font-family: var(--font-sans);
-  overflow-x: hidden;
-}
+  body {
+    margin: 0;
+    color: var(--text-primary);
+    background: var(--canvas);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
 
-a { color: inherit; }
-button, input, select, textarea { font: inherit; }
-button, a, select, input, textarea { -webkit-tap-highlight-color: transparent; }
+  a { color: inherit; }
+  button, input, select, textarea { font: inherit; }
+  button, a, select, input, textarea { -webkit-tap-highlight-color: transparent; }
 
-:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
 }
 
 /* Runtime preview motion. Keep these names and transforms synchronized with canvas timing. */

@@ -1,13 +1,11 @@
-import { Focus, Gift, MonitorSmartphone, ShieldCheck, Zap } from "lucide-react";
 import Link from "next/link";
 import { cn } from "cn";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { studioProducts } from "../product-catalog";
-import { studioSolutions, type SolutionIconKind } from "../studio-solutions";
-const eyebrowClass = "mb-3 text-[0.8125rem] font-[750] uppercase tracking-[0.08em] text-brand-coral-strong";
-
-const solutionIcons = { focus: Focus, shield: ShieldCheck, device: MonitorSmartphone, bolt: Zap, gift: Gift } satisfies Record<SolutionIconKind, typeof Focus>;
+import { studioSolutions } from "../studio-solutions";
+import { solutionIcons } from "./solution-icons";
+import { StudioEyebrow } from "./studio-eyebrow";
 
 export function SolutionPillars({ compact = false }: { compact?: boolean }) {
   return (
@@ -22,7 +20,7 @@ export function SolutionPillars({ compact = false }: { compact?: boolean }) {
               <span className="font-mono text-xs font-semibold">0{index + 1}</span><Icon className="size-7" aria-hidden="true" />
             </CardHeader>
             <CardContent className="flex flex-1 flex-col px-5 pb-5 min-[42.001rem]:px-8 min-[42.001rem]:pb-8">
-              <p className={cn(eyebrowClass, "mt-9", compact && "mt-auto text-accent-gold")}>{solution.name}</p>
+              <StudioEyebrow tone={compact ? "inverted" : "default"} spacing={compact ? "push" : "offset"}>{solution.name}</StudioEyebrow>
               <h3 className={cn("mb-4 max-w-[14ch] font-display text-[clamp(2rem,4vw,3.5rem)] font-[560] leading-[0.95] tracking-[-0.04em]", compact && "text-[1.65rem]")}>{solution.headline}</h3>
               <p className={cn("max-w-148 leading-[1.6] text-text-secondary", compact && "text-surface-inset")}>{solution.description}</p>
               {compact ? <Link className={cn(buttonVariants({ variant: "link" }), "mt-5 w-fit text-accent-gold")} href={`/solutions#${solution.slug}`}>See how it works</Link> : null}

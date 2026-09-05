@@ -9,8 +9,8 @@ export function RangeControl({ label, value, min, max, step = 1, suffix = "", on
     if (!Number.isFinite(candidate)) return;
     onChange(Math.min(max, Math.max(min, candidate)));
   };
-  return <div className="control range-control">
-    <div className="control-label"><span id={labelId}>{label}</span><output>{value}{suffix}</output></div>
-    <Slider aria-labelledby={labelId} value={[value]} min={min} max={max} step={step} onValueChange={handleValueChange} />
+  return <div className="min-w-0 border-b border-divider py-3.5" data-slot="range-control">
+    <div className="mb-[9px] flex justify-between gap-2 text-[0.75rem] font-extrabold"><span id={labelId}>{label}</span><output className="rounded-sm bg-accent-gold-soft px-[5px] py-0.5 font-mono font-black">{value}{suffix}</output></div>
+    <Slider className="flex min-h-11 items-center" aria-labelledby={labelId} value={[value]} min={min} max={max} step={step} onValueChange={handleValueChange} />
   </div>;
 }

@@ -2,7 +2,9 @@
 
 import { useState, type RefObject } from "react";
 import { Pause, Play, RotateCcw } from "lucide-react";
+import { cn } from "cn";
 import { Button } from "@/components/ui/button";
+import { PaneKicker } from "./pane-header";
 import type { SessionState } from "../use-teleprompter-session";
 
 type PreparedVideoProps = {
@@ -31,21 +33,21 @@ export function PreparedVideo({ videoRef, sessionState, loop, onPlay, onPause, o
     setDuration(0);
   };
 
-  return <section className={`prepared-output${sessionState === "ready" ? " is-ready" : ""}`} aria-labelledby="prepared-heading">
-    <div className="prepared-heading"><div><span className="pane-kicker">Record</span><h3 id="prepared-heading">Playback check</h3></div><output aria-live="off">{formatTime(currentTime)} / {formatTime(duration)}</output></div>
+  return <section className={cn("mt-[22px] border-t border-divider pt-5", sessionState !== "ready" && "hidden")} aria-labelledby="prepared-heading" data-slot="prepared-output" data-ready={sessionState === "ready" || undefined}>
+    <div className="mb-3 flex items-end justify-between gap-4"><div><PaneKicker>Record</PaneKicker><h3 className="m-0 font-sans text-[1.05rem] font-black" id="prepared-heading">Playback check</h3></div><output className="font-mono text-[0.65rem] font-extrabold" aria-live="off">{formatTime(currentTime)} / {formatTime(duration)}</output></div>
     <video
-      ref={videoRef} className="prepared-video" aria-label="Prepared teleprompter video" playsInline loop={loop}
+      ref={videoRef} className="block h-auto max-h-[50dvh] w-full rounded-md border border-border bg-text-primary object-contain shadow-(--shadow-sm) max-[760px]:max-h-[42dvh]" aria-label="Prepared teleprompter video" playsInline loop={loop}
       onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)}
       onEmptied={resetTimeline}
       onSeeking={onPlaybackPositionChange}
       onLoadedMetadata={(event) => readTimeline(event.currentTarget)} onDurationChange={(event) => readTimeline(event.currentTarget)}
       onTimeUpdate={(event) => readTimeline(event.currentTarget)} onSeeked={(event) => readTimeline(event.currentTarget)}
     />
-    <div className="prepared-controls" role="group" aria-label="Prepared video controls">
-      <Button variant="secondary" aria-label={playing ? "Pause prepared video" : "Play prepared video"} onClick={() => playing ? onPause() : void onPlay()}>
+    <div className="mt-3 flex justify-end gap-2.5" role="group" aria-label="Prepared video controls">
+      <Button variant="secondary" className="min-h-11" aria-label={playing ? "Pause prepared video" : "Play prepared video"} onClick={() => playing ? onPause() : void onPlay()}>
         {playing ? <Pause /> : <Play />}<span>{playing ? "Pause" : "Play"}</span>
       </Button>
-      <Button variant="secondary" aria-label="Restart prepared video" onClick={restart}><RotateCcw /><span>Restart</span></Button>
+      <Button variant="secondary" className="min-h-11" aria-label="Restart prepared video" onClick={restart}><RotateCcw /><span>Restart</span></Button>
     </div>
   </section>;
 }

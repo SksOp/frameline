@@ -12,6 +12,14 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button"
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "lucide-react"
 
+/**
+ * date-fns v4 no longer exports `Locale` from `date-fns/locale`, so react-day-picker's
+ * `DayPickerLocale` loses `code` at the type level. The runtime locale still carries it.
+ */
+function localeCode(locale: Partial<Locale> | undefined) {
+  return (locale as { code?: string } | undefined)?.code
+}
+
 function Calendar({
   className,
   classNames,
@@ -40,7 +48,7 @@ function Calendar({
       locale={locale}
       formatters={{
         formatMonthDropdown: (date) =>
-          date.toLocaleString(locale?.code, { month: "short" }),
+          date.toLocaleString(localeCode(locale), { month: "short" }),
         ...formatters,
       }}
       classNames={{
@@ -198,7 +206,7 @@ function CalendarDayButton({
     <Button
       variant="ghost"
       size="icon"
-      data-day={day.date.toLocaleDateString(locale?.code)}
+      data-day={day.date.toLocaleDateString(localeCode(locale))}
       data-selected-single={
         modifiers.selected &&
         !modifiers.range_start &&

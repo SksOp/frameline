@@ -23,10 +23,10 @@ describe("PreviewPane", () => {
     const view = render(<PreviewPane text={text} settings={settings} timeline={createScriptTimeline(text, settings)} previewKey="first" previewPaused={false} sessionState="idle" onTogglePause={() => undefined} />);
     const expected = buildRenderPlan(text, settings, measure);
 
-    await waitFor(() => expect(view.container.querySelectorAll(".preview-line")).toHaveLength(expected.lines.length));
-    expect(Array.from(view.container.querySelectorAll(".preview-line"), (line) => line.textContent === "\u00a0" ? "" : line.textContent)).toEqual(expected.lines);
-    const preview = view.container.querySelector<HTMLElement>(".preview")!;
-    const viewport = view.container.querySelector<HTMLElement>(".preview-viewport")!;
+    await waitFor(() => expect(view.container.querySelectorAll("[data-slot=preview-line]")).toHaveLength(expected.lines.length));
+    expect(Array.from(view.container.querySelectorAll("[data-slot=preview-line]"), (line) => line.textContent === "\u00a0" ? "" : line.textContent)).toEqual(expected.lines);
+    const preview = view.container.querySelector<HTMLElement>("[data-slot=preview]")!;
+    const viewport = view.container.querySelector<HTMLElement>("[data-slot=preview-viewport]")!;
     expect(viewport.dataset.canonicalWidth).toBe("900");
     expect(preview.style.getPropertyValue("--preview-scale")).toBe("0.5");
     expect(preview.style.getPropertyValue("--preview-padding")).toBe("28px");
@@ -50,23 +50,23 @@ describe("PreviewPane", () => {
     });
     const settings = { ...DEFAULT_SETTINGS, showProgress: true };
     const view = render(<PreviewPane text="First script" settings={settings} timeline={createScriptTimeline("First script", settings)} previewKey="first" previewPaused={false} sessionState="idle" onTogglePause={() => undefined} />);
-    await waitFor(() => expect(view.container.querySelector(".preview-script")).not.toBeNull());
-    const firstScript = view.container.querySelector(".preview-script");
-    const firstProgress = view.container.querySelector(".reading-progress-track");
-    expect(firstProgress?.parentElement?.classList.contains("preview")).toBe(true);
+    await waitFor(() => expect(view.container.querySelector("[data-slot=preview-script]")).not.toBeNull());
+    const firstScript = view.container.querySelector("[data-slot=preview-script]");
+    const firstProgress = view.container.querySelector("[data-slot=reading-progress-track]");
+    expect(firstProgress?.parentElement?.dataset.slot).toBe("preview");
     expect(firstScript?.getAttribute("data-animation-key")).toBe(firstProgress?.getAttribute("data-animation-key"));
     expect((firstScript as HTMLElement).style.fontFamily).toBe('"Inter Variable", sans-serif');
     expect((firstScript as HTMLElement).style.fontWeight).toBe("600");
 
     fireEvent.click(within(view.container).getByRole("button", { name: "Restart preview" }));
-    const restartedScript = view.container.querySelector(".preview-script");
-    const restartedProgress = view.container.querySelector(".reading-progress-track");
+    const restartedScript = view.container.querySelector("[data-slot=preview-script]");
+    const restartedProgress = view.container.querySelector("[data-slot=reading-progress-track]");
     expect(restartedScript).not.toBe(firstScript);
     expect(restartedProgress).not.toBe(firstProgress);
     expect(restartedScript?.getAttribute("data-animation-key")).toBe(restartedProgress?.getAttribute("data-animation-key"));
 
     view.rerender(<PreviewPane text="Changed script" settings={settings} timeline={createScriptTimeline("Changed script", settings)} previewKey="changed" previewPaused={false} sessionState="idle" onTogglePause={() => undefined} />);
-    expect(view.container.querySelector(".preview-script")).not.toBe(restartedScript);
-    expect(view.container.querySelector(".reading-progress-track")).not.toBe(restartedProgress);
+    expect(view.container.querySelector("[data-slot=preview-script]")).not.toBe(restartedScript);
+    expect(view.container.querySelector("[data-slot=reading-progress-track]")).not.toBe(restartedProgress);
   });
 });

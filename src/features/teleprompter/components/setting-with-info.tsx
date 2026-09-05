@@ -18,6 +18,8 @@ type SettingWithInfoProps = {
   onChange(checked: boolean): void;
 };
 
+const infoButtonClass = "size-11 aria-expanded:border-brand-coral aria-expanded:bg-brand-coral-soft aria-expanded:shadow-none";
+
 export function SettingWithInfo({
   id,
   label,
@@ -29,13 +31,13 @@ export function SettingWithInfo({
   const contentId = `${id}-setting-info`;
 
   return (
-    <div className="setting-with-info">
-      <label className="switch"><Switch checked={checked} onCheckedChange={onChange} aria-label={label} /><span>{label}</span></label>
+    <div className="grid grid-cols-[minmax(0,1fr)_44px] items-center border-b border-divider" data-slot="setting-with-info">
+      <label className="flex min-h-[62px] min-w-0 items-center gap-3 py-3.5 text-[0.78rem] font-extrabold"><Switch size="sm" checked={checked} onCheckedChange={onChange} /><span>{label}</span></label>
 
-      <div className="desktop-setting-help">
+      <div className="max-[760px]:hidden">
         <HoverCard>
           <HoverCardTrigger
-            render={<Button className="info-button" size="icon-lg" variant="ghost" />}
+            render={<Button className={infoButtonClass} size="icon" variant="ghost" />}
             delay={250}
             closeDelay={150}
             aria-label={`About ${label}`}
@@ -43,7 +45,7 @@ export function SettingWithInfo({
             <Info />
           </HoverCardTrigger>
           <HoverCardContent
-            className="teleprompter-surface setting-hover-card"
+            className="w-[min(280px,calc(100vw-32px))] px-3.5 py-3 text-[0.75rem] leading-[1.55] font-[650] text-text-primary"
             side="right"
             sideOffset={8}
             align="center"
@@ -54,8 +56,8 @@ export function SettingWithInfo({
       </div>
 
       <Button
-        className="info-button mobile-setting-help"
-        size="icon-lg"
+        className={`${infoButtonClass} hidden max-[760px]:inline-flex`}
+        size="icon"
         variant="ghost"
         aria-label={`About ${label}`}
         aria-expanded={open}
@@ -65,7 +67,7 @@ export function SettingWithInfo({
         <Info />
       </Button>
       {open && (
-        <p className="setting-info mobile-setting-info" id={contentId}>
+        <p className="col-span-full -mt-0.5 mb-3 hidden rounded-md border border-border bg-surface-inset p-3 text-[0.72rem] leading-[1.5] text-text-secondary shadow-none max-[760px]:block" id={contentId}>
           {description}
         </p>
       )}

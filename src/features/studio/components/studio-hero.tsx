@@ -5,13 +5,12 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { FramelineMark } from "./frameline-logo";
 import { StudioContainer } from "./studio-container";
-
-const eyebrowClass = "mb-3 text-[0.8125rem] font-[750] uppercase tracking-[0.08em] text-brand-coral-strong";
+import { StudioEyebrow } from "./studio-eyebrow";
 
 export function StudioHero() {
   return <StudioContainer className="grid items-center gap-16 py-12 min-[42.001rem]:py-16 min-[68.001rem]:min-h-[min(50rem,calc(100svh-4.75rem))] min-[68.001rem]:grid-cols-[minmax(0,0.9fr)_minmax(30rem,1.1fr)]">
     <section className="mx-auto max-w-224 text-center min-[68.001rem]:mx-0 min-[68.001rem]:max-w-172 min-[68.001rem]:text-left" aria-labelledby="studio-hero-title">
-      <p className={eyebrowClass}>A private creative toolkit</p>
+      <StudioEyebrow>A private creative toolkit</StudioEyebrow>
       <h1 className="font-display text-[clamp(3.5rem,9vw,8rem)] font-[560] leading-[0.88] tracking-[-0.065em]" id="studio-hero-title">Make the thing.<br /><em className="font-inherit text-brand-coral">Skip the setup.</em></h1>
       <p className="mx-auto mt-5 mb-7 max-w-176 text-[clamp(1.0625rem,2.5vw,1.25rem)] leading-[1.6] text-text-secondary min-[68.001rem]:mx-0">Frameline is a growing studio of focused creator tools. Open what you need, work in your browser, and keep your files on your device whenever the job allows.</p>
       <div className="flex flex-col items-stretch justify-center gap-5 min-[42.001rem]:flex-row min-[42.001rem]:items-center min-[68.001rem]:justify-start"><Link className={buttonVariants()} href="/studio">Open Studio <ArrowRight data-icon="inline-end" aria-hidden="true" /></Link><Link className={buttonVariants({ variant: "link" })} href="/products">Explore the tools</Link></div>

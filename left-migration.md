@@ -1,5 +1,9 @@
 # Component-First Styling Migration Handoff
 
+> **Status: complete.** Both feature stylesheets are gone, the three Studio cleanups and the whole
+> Teleprompter workspace are migrated, and `npm run typecheck`, `npm test` (98), `npm run lint`, and
+> `npm run build` all pass. The sections below are kept as the record of what was done.
+
 ## Objective
 
 Finish the repository-wide migration from feature stylesheets to component-owned, token-backed Tailwind utilities.
