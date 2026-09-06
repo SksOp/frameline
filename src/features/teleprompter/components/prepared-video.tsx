@@ -6,6 +6,7 @@ import { cn } from "cn";
 import { Button } from "@/components/ui/button";
 import { PaneKicker } from "./pane-header";
 import type { SessionState } from "../use-teleprompter-session";
+import { formatTime } from "../format-time";
 
 type PreparedVideoProps = {
   videoRef: RefObject<HTMLVideoElement | null>;
@@ -50,9 +51,4 @@ export function PreparedVideo({ videoRef, sessionState, loop, onPlay, onPause, o
       <Button variant="secondary" className="min-h-11" aria-label="Restart prepared video" onClick={restart}><RotateCcw /><span>Restart</span></Button>
     </div>
   </section>;
-}
-
-function formatTime(seconds: number) {
-  if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
-  return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
 }

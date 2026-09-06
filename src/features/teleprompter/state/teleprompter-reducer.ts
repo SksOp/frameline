@@ -66,6 +66,8 @@ export function teleprompterReducer(
       return { ...state, settingsOpen: false };
     case "previewPauseToggled":
       return { ...state, previewPaused: !state.previewPaused };
+    case "previewPauseChanged":
+      return state.previewPaused === action.paused ? state : { ...state, previewPaused: action.paused };
     case "preparedSignatureCommitted":
       return { ...state, preparedSignature: action.signature };
   }

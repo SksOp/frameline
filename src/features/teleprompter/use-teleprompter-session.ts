@@ -174,6 +174,18 @@ export function useTeleprompterSession(wordsPerMinute = DEFAULT_SETTINGS.wordsPe
       syncPlaybackRate();
     }
   }, [syncPlaybackRate]);
+  const seekPreparedTo = useCallback((seconds: number) => {
+    const video = videoRef.current;
+    if (!video || !Number.isFinite(seconds)) return;
+    const end = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : Number.POSITIVE_INFINITY;
+    video.currentTime = Math.min(end, Math.max(0, seconds));
+    syncPlaybackRate();
+  }, [syncPlaybackRate]);
+  const seekPreparedBy = useCallback((offsetSeconds: number) => {
+    const video = videoRef.current;
+    if (!video) return;
+    seekPreparedTo(video.currentTime + offsetSeconds);
+  }, [seekPreparedTo]);
   const enterPip = useCallback(async () => {
     const video = videoRef.current; if (!video) return;
     try {
@@ -186,5 +198,5 @@ export function useTeleprompterSession(wordsPerMinute = DEFAULT_SETTINGS.wordsPe
       setError("The floating window could not open. Check Picture-in-Picture permissions and try again.");
     }
   }, [syncPlaybackRate]);
-  return { videoRef, state, progress, error, prepare, cancel, playPrepared, pausePrepared, restartPrepared, syncPlaybackRate, enterPip };
+  return { videoRef, state, progress, error, prepare, cancel, playPrepared, pausePrepared, restartPrepared, seekPreparedTo, seekPreparedBy, syncPlaybackRate, enterPip };
 }

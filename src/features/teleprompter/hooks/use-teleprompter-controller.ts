@@ -12,6 +12,7 @@ import {
   selectWordCount,
 } from "../state/teleprompter-selectors";
 import { useTeleprompterSession } from "../use-teleprompter-session";
+import { useMediaSessionControls } from "./use-media-session-controls";
 import { usePreparedOutput } from "./use-prepared-output";
 import { clearStoredDraft } from "./use-draft-persistence";
 import { useTeleprompterBootstrap } from "./use-teleprompter-bootstrap";
@@ -24,6 +25,13 @@ export function useTeleprompterController() {
   const rememberPendingSignature = usePreparedOutput(session.state, dispatch);
   const preparedVideoIsStale = selectPreparedVideoIsStale(state, session.state);
   const primaryActionState = selectPrimaryActionState(state, session.state, session.progress);
+  useMediaSessionControls(session.videoRef, session.state === "ready", {
+    play: session.playPrepared,
+    pause: session.pausePrepared,
+    restart: session.restartPrepared,
+    seekBy: session.seekPreparedBy,
+    seekTo: session.seekPreparedTo,
+  });
 
   const clear = async () => {
     dispatch({ type: "draftCleared" });

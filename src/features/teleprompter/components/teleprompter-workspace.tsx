@@ -56,6 +56,7 @@ export function TeleprompterWorkspace() {
           previewPaused={state.previewPaused}
           sessionState={session.state}
           onTogglePause={() => dispatch({ type: 'previewPauseToggled' })}
+          onPause={() => dispatch({ type: 'previewPauseChanged', paused: true })}
           preparedOutput={
             <PreparedVideo
               videoRef={session.videoRef}

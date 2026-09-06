@@ -41,6 +41,10 @@ describe("teleprompterReducer", () => {
       previewPaused: true,
       settings: { fontSize: 58 },
     });
+
+    const paused = teleprompterReducer(state, { type: "previewPauseChanged", paused: true });
+    expect(paused).toBe(state);
+    expect(teleprompterReducer(paused, { type: "previewPauseChanged", paused: false }).previewPaused).toBe(false);
   });
 
   it("hydrates persisted settings over the defaults", () => {

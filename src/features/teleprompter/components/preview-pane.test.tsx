@@ -20,7 +20,7 @@ describe("PreviewPane", () => {
     });
     const text = `${Array.from({ length: 30 }, () => "word").join(" ")}\n\nLast paragraph 👋🏽`;
     const settings = { ...DEFAULT_SETTINGS, aspectRatio: "3:1" as const };
-    const view = render(<PreviewPane text={text} settings={settings} timeline={createScriptTimeline(text, settings)} previewKey="first" previewPaused={false} sessionState="idle" onTogglePause={() => undefined} />);
+    const view = render(<PreviewPane text={text} settings={settings} timeline={createScriptTimeline(text, settings)} previewKey="first" previewPaused={false} sessionState="idle" onTogglePause={() => undefined} onPause={() => undefined} />);
     const expected = buildRenderPlan(text, settings, measure);
 
     await waitFor(() => expect(view.container.querySelectorAll("[data-slot=preview-line]")).toHaveLength(expected.lines.length));
@@ -33,7 +33,7 @@ describe("PreviewPane", () => {
     expect(preview.style.getPropertyValue("--preview-start-y")).toBe("150px");
 
     const classic = { ...settings, aspectRatio: "4:3" as const };
-    view.rerender(<PreviewPane text={text} settings={classic} timeline={createScriptTimeline(text, classic)} previewKey="classic" previewPaused={false} sessionState="idle" onTogglePause={() => undefined} />);
+    view.rerender(<PreviewPane text={text} settings={classic} timeline={createScriptTimeline(text, classic)} previewKey="classic" previewPaused={false} sessionState="idle" onTogglePause={() => undefined} onPause={() => undefined} />);
     await waitFor(() => expect(viewport.dataset.canonicalWidth).toBe("720"));
     expect(Number(preview.style.getPropertyValue("--preview-scale"))).toBeCloseTo(0.625);
     expect(preview.style.getPropertyValue("--preview-start-y")).toBe("337.5px");
@@ -49,7 +49,7 @@ describe("PreviewPane", () => {
       unobserve() {}
     });
     const settings = { ...DEFAULT_SETTINGS, showProgress: true };
-    const view = render(<PreviewPane text="First script" settings={settings} timeline={createScriptTimeline("First script", settings)} previewKey="first" previewPaused={false} sessionState="idle" onTogglePause={() => undefined} />);
+    const view = render(<PreviewPane text="First script" settings={settings} timeline={createScriptTimeline("First script", settings)} previewKey="first" previewPaused={false} sessionState="idle" onTogglePause={() => undefined} onPause={() => undefined} />);
     await waitFor(() => expect(view.container.querySelector("[data-slot=preview-script]")).not.toBeNull());
     const firstScript = view.container.querySelector("[data-slot=preview-script]");
     const firstProgress = view.container.querySelector("[data-slot=reading-progress-track]");
@@ -65,7 +65,7 @@ describe("PreviewPane", () => {
     expect(restartedProgress).not.toBe(firstProgress);
     expect(restartedScript?.getAttribute("data-animation-key")).toBe(restartedProgress?.getAttribute("data-animation-key"));
 
-    view.rerender(<PreviewPane text="Changed script" settings={settings} timeline={createScriptTimeline("Changed script", settings)} previewKey="changed" previewPaused={false} sessionState="idle" onTogglePause={() => undefined} />);
+    view.rerender(<PreviewPane text="Changed script" settings={settings} timeline={createScriptTimeline("Changed script", settings)} previewKey="changed" previewPaused={false} sessionState="idle" onTogglePause={() => undefined} onPause={() => undefined} />);
     expect(view.container.querySelector("[data-slot=preview-script]")).not.toBe(restartedScript);
     expect(view.container.querySelector("[data-slot=reading-progress-track]")).not.toBe(restartedProgress);
   });

@@ -61,6 +61,7 @@ export type TeleprompterAction =
   | { type: "settingsOpened" }
   | { type: "settingsClosed" }
   | { type: "previewPauseToggled" }
+  | { type: "previewPauseChanged"; paused: boolean }
   | { type: "preparedSignatureCommitted"; signature: string };
 
 export function settingChanged<Key extends keyof TeleprompterSettings>(
