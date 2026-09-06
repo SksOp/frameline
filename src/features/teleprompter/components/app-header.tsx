@@ -1,29 +1,16 @@
 import Link from 'next/link';
-import { LockKeyhole, Moon, Settings2, Sun } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Settings2 } from 'lucide-react';
 import { FramelineLogo } from '@/features/studio/components/frameline-logo';
 import { formatDuration } from '../state/teleprompter-selectors';
 import { ToolButton } from './tool-button';
-import type { ResolvedTheme, ThemePreference } from '../hooks/use-theme';
 
 interface AppHeaderProps {
   words: number;
   duration: number;
   onOpenSettings(): void;
-  theme?: ThemePreference;
-  resolvedTheme?: ResolvedTheme;
-  onToggleTheme?(): void;
 }
 
-export function AppHeader({
-  words,
-  duration,
-  onOpenSettings,
-  theme = 'system',
-  resolvedTheme = 'light',
-  onToggleTheme,
-}: AppHeaderProps) {
-  const isDark = resolvedTheme === 'dark';
+export function AppHeader({ words, duration, onOpenSettings }: AppHeaderProps) {
   return (
     <header className="sticky top-0 z-5 grid min-h-[70px] grid-cols-[1fr_auto_1fr] items-center border-b border-divider bg-[color-mix(in_srgb,var(--canvas)_92%,transparent)] px-[14px] text-text-primary shadow-(--shadow-sm) backdrop-blur-[12px] max-[760px]:-mx-[14px] max-[760px]:min-h-[62px] max-[760px]:grid-cols-[1fr_auto]">
       <Link
@@ -40,19 +27,6 @@ export function AppHeader({
         <span>{formatDuration(duration)}</span>
       </div>
       <div className="flex items-center justify-end gap-2.5">
-        {onToggleTheme && (
-          <ToolButton
-            iconOnly
-            onClick={onToggleTheme}
-            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-            title={`Theme: ${theme} (${resolvedTheme})`}
-          >
-            {isDark ? <Sun /> : <Moon />}
-          </ToolButton>
-        )}
-        <Badge className="min-h-[30px] rounded-full border-border px-[9px] py-[5px] text-[0.65rem] shadow-none max-[760px]:px-1.5 max-[760px]:text-[0.6rem]" variant="secondary">
-          <LockKeyhole /> Private
-        </Badge>
         <ToolButton className="max-[760px]:hidden" onClick={onOpenSettings}>
           <Settings2 />
           <span>Settings</span>

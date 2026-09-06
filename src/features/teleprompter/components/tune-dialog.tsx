@@ -21,7 +21,6 @@ import {
   NativeSelectOption,
 } from '@/components/ui/native-select';
 import { useMediaQuery } from '../hooks/use-media-query';
-import type { ThemePreference } from '../hooks/use-theme';
 import { HORIZONTAL_PADDING_BOUNDS, type TeleprompterSettings } from '../types';
 import { PaneKicker, PaneTitle } from './pane-header';
 import { RangeControl } from './range-control';
@@ -37,14 +36,12 @@ type TuneDialogProps = {
   settings: TeleprompterSettings;
   onClose(): void;
   onSettingChange: SettingUpdater;
-  theme?: ThemePreference;
-  onThemeChange?: (theme: ThemePreference) => void;
 };
 
 const surfaceClass =
   'flex flex-col gap-0 overflow-hidden bg-surface-elevated p-0 shadow-(--shadow-lg)';
 const headerClass =
-  'block border-b border-divider bg-surface-strong px-[22px] py-[18px] max-[760px]:px-[18px] max-[760px]:pt-3 max-[760px]:pb-[13px]';
+  'block border-b border-divider bg-surface-strong px-[22px] py-[18px] max-[760px]:px-[18px] max-[760px]:pt-5 max-[760px]:pb-[13px]';
 const fieldsetClass = 'm-0 block border-0 py-5 max-[760px]:py-4';
 const legendClass =
   'w-max rounded-full bg-brand-coral-soft px-[7px] py-[5px] font-mono text-[0.62rem] font-[850] text-brand-coral-strong';
@@ -59,18 +56,9 @@ export function TuneDialog({
   settings,
   onClose,
   onSettingChange,
-  theme,
-  onThemeChange,
 }: TuneDialogProps) {
   const phone = useMediaQuery('(max-width: 760px)');
-  const controls = (
-    <TuneControls
-      settings={settings}
-      update={onSettingChange}
-      theme={theme}
-      onThemeChange={onThemeChange}
-    />
-  );
+  const controls = <TuneControls settings={settings} update={onSettingChange} />;
   const footer = <SettingsFooter onClose={onClose} />;
   const handleOpenChange = (nextOpen: boolean) => {
     if (!nextOpen) onClose();
@@ -80,7 +68,7 @@ export function TuneDialog({
     return (
       <Drawer open={open} onOpenChange={handleOpenChange} showSwipeHandle>
         <DrawerContent
-          className={`${surfaceClass} max-h-[88dvh] w-full rounded-t-xl border-x-0 border-b-0`}
+          className={`${surfaceClass} max-h-[88dvh] w-full rounded-t-xl border-x-0 border-b-0 bg-surface-strong`}
         >
           <DrawerHeader className={headerClass}>
             <TuneHeading
@@ -143,13 +131,9 @@ function TuneHeading({
 function TuneControls({
   settings,
   update,
-  theme,
-  onThemeChange,
 }: {
   settings: TeleprompterSettings;
   update: SettingUpdater;
-  theme?: ThemePreference;
-  onThemeChange?: (theme: ThemePreference) => void;
 }) {
   return (
     <div className="overflow-auto bg-surface-elevated px-[22px] pt-1 pb-[22px] max-[760px]:px-[18px] max-[760px]:pt-0.5 max-[760px]:pb-[18px]">
@@ -279,31 +263,6 @@ function TuneControls({
           />
         </div>
       </fieldset>
-      {onThemeChange && (
-        <fieldset className={`${fieldsetClass} border-t border-divider`}>
-          <legend className={legendClass}>App</legend>
-          <div className={gridClass}>
-            <label className={controlClass}>
-              <span className={controlLabelClass}>Appearance</span>
-              <NativeSelect
-                className="w-full"
-                value={theme ?? 'system'}
-                onChange={(event) =>
-                  onThemeChange(event.target.value as ThemePreference)
-                }
-              >
-                <NativeSelectOption value="system">
-                  System (default)
-                </NativeSelectOption>
-                <NativeSelectOption value="dark">Dark mode</NativeSelectOption>
-                <NativeSelectOption value="light">
-                  Light mode
-                </NativeSelectOption>
-              </NativeSelect>
-            </label>
-          </div>
-        </fieldset>
-      )}
     </div>
   );
 }

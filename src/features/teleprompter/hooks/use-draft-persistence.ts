@@ -33,6 +33,11 @@ export async function clearStoredDraft() {
   }
 }
 
+export async function saveImportedDraft(text: string) {
+  removeClearTombstone();
+  await draftStore.save(createScriptDocument(text));
+}
+
 export function useDraftPersistence(
   dispatch: Dispatch<TeleprompterAction>,
   text: string,

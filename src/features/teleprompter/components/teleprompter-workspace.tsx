@@ -17,7 +17,7 @@ import { settingChanged } from '../state/teleprompter-state';
 export function TeleprompterWorkspace() {
   const { state, dispatch, session, derived, clear, primaryAction } =
     useTeleprompterController();
-  const { theme, resolvedTheme, setTheme, toggleTheme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
   return (
     <main
@@ -32,9 +32,6 @@ export function TeleprompterWorkspace() {
         words={derived.words}
         duration={derived.duration}
         onOpenSettings={() => dispatch({ type: 'settingsOpened' })}
-        theme={theme}
-        resolvedTheme={resolvedTheme}
-        onToggleTheme={toggleTheme}
       />
       <CapabilityNotice unsupported={derived.unsupported} />
       <div
@@ -102,8 +99,6 @@ export function TeleprompterWorkspace() {
         settings={state.settings}
         onClose={() => dispatch({ type: 'settingsClosed' })}
         onSettingChange={(key, value) => dispatch(settingChanged(key, value))}
-        theme={theme}
-        onThemeChange={setTheme}
       />
     </main>
   );
