@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useTeleprompterState } from "../state/teleprompter-context";
+import { useTeleprompterState } from '../state/teleprompter-context';
 import {
   selectDurationSeconds,
   selectGenerationSignature,
@@ -10,12 +10,12 @@ import {
   selectTimeline,
   selectUnsupportedCapabilities,
   selectWordCount,
-} from "../state/teleprompter-selectors";
-import { useTeleprompterSession } from "../use-teleprompter-session";
-import { useMediaSessionControls } from "./use-media-session-controls";
-import { usePreparedOutput } from "./use-prepared-output";
-import { clearStoredDraft } from "./use-draft-persistence";
-import { useTeleprompterBootstrap } from "./use-teleprompter-bootstrap";
+} from '../state/teleprompter-selectors';
+import { useTeleprompterSession } from '../use-teleprompter-session';
+import { useMediaSessionControls } from './use-media-session-controls';
+import { usePreparedOutput } from './use-prepared-output';
+import { clearStoredDraft } from './use-draft-persistence';
+import { useTeleprompterBootstrap } from './use-teleprompter-bootstrap';
 
 export function useTeleprompterController() {
   const { state, dispatch } = useTeleprompterState();
@@ -24,18 +24,29 @@ export function useTeleprompterController() {
   const generationSignature = selectGenerationSignature(state);
   const rememberPendingSignature = usePreparedOutput(session.state, dispatch);
   const preparedVideoIsStale = selectPreparedVideoIsStale(state, session.state);
-  const primaryActionState = selectPrimaryActionState(state, session.state, session.progress);
-  useMediaSessionControls(session.videoRef, session.state === "ready", {
-    play: session.playPrepared,
-    pause: session.pausePrepared,
-    seekBy: session.seekPreparedBy,
-    seekTo: session.seekPreparedTo,
-  });
+  const primaryActionState = selectPrimaryActionState(
+    state,
+    session.state,
+    session.progress,
+  );
 
+  useMediaSessionControls(
+    session.videoRef,
+    session.state === 'ready',
+    {
+      play: session.playPrepared,
+      pause: session.pausePrepared,
+      seekBy: session.seekPreparedBy,
+      seekTo: session.seekPreparedTo,
+    },
+    session.duration, // Passes the calculated duration down
+  );
   const clear = async () => {
-    dispatch({ type: "draftCleared" });
+    dispatch({ type: 'draftCleared' });
     const cleared = await clearStoredDraft();
-    dispatch({ type: cleared ? "draftPersistenceRecovered" : "draftClearFailed" });
+    dispatch({
+      type: cleared ? 'draftPersistenceRecovered' : 'draftClearFailed',
+    });
   };
 
   const startPreparation = () => {
@@ -44,11 +55,11 @@ export function useTeleprompterController() {
   };
 
   const primaryAction = () => {
-    if (session.state === "generating") {
+    if (session.state === 'generating') {
       session.cancel();
       return;
     }
-    if (session.state === "ready" && !preparedVideoIsStale) {
+    if (session.state === 'ready' && !preparedVideoIsStale) {
       void session.enterPip();
       return;
     }
