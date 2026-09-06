@@ -28,7 +28,6 @@ export function useTeleprompterController() {
   useMediaSessionControls(session.videoRef, session.state === "ready", {
     play: session.playPrepared,
     pause: session.pausePrepared,
-    restart: session.restartPrepared,
     seekBy: session.seekPreparedBy,
     seekTo: session.seekPreparedTo,
   });

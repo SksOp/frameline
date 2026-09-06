@@ -5,14 +5,19 @@ import { useEffect, useRef, type RefObject } from "react";
 export type MediaSessionHandlers = {
   play(): void | Promise<void>;
   pause(): void;
-  restart(): void;
   seekBy(offsetSeconds: number): void;
   seekTo(seconds: number): void;
 };
 
 export const MEDIA_SESSION_SEEK_STEP_SECONDS = 10;
 
-const ACTIONS: MediaSessionAction[] = ["play", "pause", "previoustrack", "seekbackward", "seekforward", "seekto"];
+/**
+ * Deliberately omits `previoustrack`/`nexttrack`. The Picture-in-Picture window has three
+ * control slots, and Chrome fills the outer two with track skip whenever those handlers
+ * exist, which reads as restart rather than a 10 second jump. Leaving them unregistered
+ * promotes `seekbackward`/`seekforward` into those slots instead.
+ */
+const ACTIONS: MediaSessionAction[] = ["play", "pause", "seekbackward", "seekforward", "seekto"];
 
 function setActionHandler(session: MediaSession, action: MediaSessionAction, handler: MediaSessionActionHandler | null) {
   try {
@@ -23,9 +28,10 @@ function setActionHandler(session: MediaSession, action: MediaSessionAction, han
 }
 
 /**
- * Publishes the prepared video to the Media Session so Android Chrome draws play/pause,
- * restart, and seek controls inside the Picture-in-Picture window. A silent video never
- * gets those controls on its own because the browser only surfaces them for a media session.
+ * Publishes the prepared video to the Media Session so Android Chrome draws
+ * seek-back, play/pause, and seek-forward controls inside the Picture-in-Picture
+ * window. A silent video never gets those controls on its own because the browser
+ * only surfaces them for a media session.
  */
 export function useMediaSessionControls(videoRef: RefObject<HTMLVideoElement | null>, enabled: boolean, handlers: MediaSessionHandlers) {
   const handlersRef = useRef(handlers);
@@ -38,7 +44,6 @@ export function useMediaSessionControls(videoRef: RefObject<HTMLVideoElement | n
 
     setActionHandler(session, "play", () => { void handlersRef.current.play(); });
     setActionHandler(session, "pause", () => handlersRef.current.pause());
-    setActionHandler(session, "previoustrack", () => handlersRef.current.restart());
     setActionHandler(session, "seekbackward", (details) => handlersRef.current.seekBy(-(details.seekOffset ?? MEDIA_SESSION_SEEK_STEP_SECONDS)));
     setActionHandler(session, "seekforward", (details) => handlersRef.current.seekBy(details.seekOffset ?? MEDIA_SESSION_SEEK_STEP_SECONDS));
     setActionHandler(session, "seekto", (details) => { if (typeof details.seekTime === "number") handlersRef.current.seekTo(details.seekTime); });
