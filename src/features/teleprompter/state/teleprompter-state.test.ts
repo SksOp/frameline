@@ -33,11 +33,15 @@ describe("teleprompterReducer", () => {
     state = teleprompterReducer(state, settingChanged("fontSize", 58));
     state = teleprompterReducer(state, { type: "settingsOpened" });
     state = teleprompterReducer(state, { type: "previewPauseToggled" });
+    state = teleprompterReducer(state, { type: "scriptOpened" });
+    state = teleprompterReducer(state, { type: "desktopPreviewToggled" });
 
     expect(state).toMatchObject({
       text: "Hello camera",
       draftReady: true,
       settingsOpen: true,
+      scriptOpen: true,
+      desktopPreviewVisible: false,
       previewPaused: true,
       settings: { fontSize: 58 },
     });
@@ -45,6 +49,10 @@ describe("teleprompterReducer", () => {
     const paused = teleprompterReducer(state, { type: "previewPauseChanged", paused: true });
     expect(paused).toBe(state);
     expect(teleprompterReducer(paused, { type: "previewPauseChanged", paused: false }).previewPaused).toBe(false);
+
+    const studio = teleprompterReducer(paused, { type: "workspaceModeChanged", mode: "studio" });
+    expect(studio).toMatchObject({ workspaceMode: "studio", previewPaused: false });
+    expect(teleprompterReducer(studio, { type: "settingsReset" }).settings).toEqual(DEFAULT_SETTINGS);
   });
 
   it("hydrates persisted settings over the defaults", () => {

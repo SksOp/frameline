@@ -60,10 +60,24 @@ export function teleprompterReducer(
       return { ...state, capabilities: action.capabilities };
     case "mobileViewChanged":
       return { ...state, mobileView: action.view };
+    case "workspaceModeChanged":
+      return {
+        ...state,
+        workspaceMode: action.mode,
+        previewPaused: action.mode === "studio" ? false : state.previewPaused,
+      };
+    case "desktopPreviewToggled":
+      return { ...state, desktopPreviewVisible: !state.desktopPreviewVisible };
+    case "scriptOpened":
+      return { ...state, scriptOpen: true };
+    case "scriptClosed":
+      return { ...state, scriptOpen: false };
     case "settingsOpened":
       return { ...state, settingsOpen: true };
     case "settingsClosed":
       return { ...state, settingsOpen: false };
+    case "settingsReset":
+      return { ...state, settings: { ...INITIAL_TELEPROMPTER_STATE.settings } };
     case "previewPauseToggled":
       return { ...state, previewPaused: !state.previewPaused };
     case "previewPauseChanged":

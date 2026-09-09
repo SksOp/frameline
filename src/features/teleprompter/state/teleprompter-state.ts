@@ -2,6 +2,7 @@ import type { Capability } from "@/lib/client/capabilities";
 import { DEFAULT_SETTINGS, type TeleprompterSettings } from "../types";
 
 export type MobileView = "script" | "preview";
+export type WorkspaceMode = "editor" | "studio";
 
 export interface TeleprompterState {
   text: string;
@@ -14,6 +15,9 @@ export interface TeleprompterState {
   draftPersistenceError: string | null;
   settingsReady: boolean;
   mobileView: MobileView;
+  workspaceMode: WorkspaceMode;
+  desktopPreviewVisible: boolean;
+  scriptOpen: boolean;
   settingsOpen: boolean;
   previewPaused: boolean;
   preparedSignature: string | null;
@@ -30,6 +34,9 @@ export const INITIAL_TELEPROMPTER_STATE: TeleprompterState = {
   draftPersistenceError: null,
   settingsReady: false,
   mobileView: "script",
+  workspaceMode: "editor",
+  desktopPreviewVisible: true,
+  scriptOpen: false,
   settingsOpen: false,
   previewPaused: false,
   preparedSignature: null,
@@ -58,8 +65,13 @@ export type TeleprompterAction =
   | SettingChangedAction
   | { type: "capabilitiesResolved"; capabilities: Capability[] }
   | { type: "mobileViewChanged"; view: MobileView }
+  | { type: "workspaceModeChanged"; mode: WorkspaceMode }
+  | { type: "desktopPreviewToggled" }
+  | { type: "scriptOpened" }
+  | { type: "scriptClosed" }
   | { type: "settingsOpened" }
   | { type: "settingsClosed" }
+  | { type: "settingsReset" }
   | { type: "previewPauseToggled" }
   | { type: "previewPauseChanged"; paused: boolean }
   | { type: "preparedSignatureCommitted"; signature: string };

@@ -1,21 +1,35 @@
-import { Trash2 } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea";
-import { formatDuration } from "../state/teleprompter-selectors";
-import { PaneHeader } from "./pane-header";
-import { ToolButton } from "./tool-button";
+import { Textarea } from '@/components/ui/textarea';
 
 type ScriptPaneProps = {
-  text: string; draftReady: boolean; persistenceError: string | null; words: number; duration: number;
-  onTextChange(text: string): void; onClear(): Promise<void>;
+  text: string;
+  draftReady: boolean;
+  persistenceError: string | null;
+  onTextChange(text: string): void;
 };
 
-export function ScriptPane({ text, draftReady, persistenceError, words, duration, onTextChange, onClear }: ScriptPaneProps) {
-  return <section className="min-w-0 border-r border-divider bg-surface px-7 pt-[26px] pb-[30px] max-[760px]:border-0 max-[760px]:bg-transparent max-[760px]:px-0 max-[760px]:pt-[14px] max-[760px]:pb-2 max-[760px]:group-data-[mobile-view=preview]/stage:hidden" aria-labelledby="script-heading" data-slot="script-pane">
-    <PaneHeader kicker="Write" title="Your words" titleId="script-heading">
-      <ToolButton onClick={() => void onClear()} disabled={!text} aria-label="Clear script"><Trash2 /><span>Clear</span></ToolButton>
-    </PaneHeader>
-    <label className="sr-only" htmlFor="script">Your script</label>
-    <Textarea className="h-[calc(100dvh-304px)] min-h-[390px] field-sizing-fixed resize-none bg-surface-elevated p-[18px] font-mono text-[0.92rem] leading-[1.65] font-[550] text-text-primary shadow-[inset_0_1px_0_color-mix(in_srgb,var(--surface)_70%,transparent)] transition-[box-shadow,border-color,transform] duration-(--duration-standard) ease-(--ease-standard) placeholder:text-text-subtle hover:border-brand-coral hover:bg-surface-elevated hover:shadow-(--shadow-sm) focus-visible:shadow-(--shadow-sm) md:text-[0.92rem] max-[760px]:h-[calc(100dvh-238px)] max-[760px]:min-h-[320px] max-[760px]:p-[14px] max-[760px]:text-[0.82rem] max-[760px]:leading-[1.58] max-[760px]:shadow-(--shadow-sm)" id="script" value={text} disabled={!draftReady} onChange={(event) => onTextChange(event.target.value)} placeholder={draftReady ? "Paste or write your script…" : "Loading your local draft…"} />
-    <div className="mt-[15px] flex justify-between gap-4 border-t border-divider pt-3 font-mono text-[0.64rem] font-[750] uppercase text-text-secondary max-[760px]:text-[0.58rem]"><span className="text-positive">{persistenceError ?? (draftReady ? "Saved on this device" : "Loading…")}</span><span>{words} words · {formatDuration(duration)}</span></div>
-  </section>;
+export function ScriptPane({
+  text,
+  draftReady,
+  persistenceError,
+  onTextChange,
+}: ScriptPaneProps) {
+  return (
+    <section
+      className="flex min-h-0 min-w-0 flex-1 flex-col px-[var(--content-gutter)] py-6 max-[760px]:px-4 max-[760px]:py-4 max-[760px]:group-data-[mobile-view=preview]/stage:hidden"
+      aria-labelledby="script-heading"
+      data-slot="script-pane"
+    >
+      <h2 className="mb-3 font-display text-2xl leading-none font-semibold tracking-[-0.025em]" id="script-heading">Script</h2>
+      <label className="sr-only" htmlFor="script">Your script</label>
+      <Textarea
+        className="min-h-[360px] flex-1 field-sizing-fixed resize-none rounded-none border-0 border-t border-divider bg-transparent px-0 py-5 font-mono text-base leading-[1.75] font-medium text-text-primary shadow-none transition-colors placeholder:text-text-subtle hover:bg-transparent focus-visible:border-focus focus-visible:ring-0 md:text-base max-[760px]:min-h-[calc(100dvh-152px)] max-[760px]:py-4 max-[760px]:text-[0.9rem] max-[760px]:leading-[1.7]"
+        id="script"
+        value={text}
+        disabled={!draftReady}
+        onChange={(event) => onTextChange(event.target.value)}
+        placeholder={draftReady ? 'Paste or write your script…' : 'Loading your draft…'}
+      />
+      {persistenceError && <p className="mt-2 text-xs font-semibold text-danger" role="status">{persistenceError}</p>}
+    </section>
+  );
 }

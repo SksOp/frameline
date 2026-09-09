@@ -28,7 +28,7 @@ export function sanitizeSettings(value: unknown): TeleprompterSettings {
     lineHeight: numberInRange(value.lineHeight, 1, 1.8) ? value.lineHeight as number : DEFAULT_SETTINGS.lineHeight,
     textColor: color(value.textColor, DEFAULT_SETTINGS.textColor),
     backgroundColor: color(value.backgroundColor, DEFAULT_SETTINGS.backgroundColor),
-    aspectRatio: value.aspectRatio === "3:1" || value.aspectRatio === "16:9" || value.aspectRatio === "4:3"
+    aspectRatio: value.aspectRatio === "3:1" || value.aspectRatio === "16:9" || value.aspectRatio === "4:3" || value.aspectRatio === "9:16"
       ? value.aspectRatio
       : DEFAULT_SETTINGS.aspectRatio,
     horizontalPadding: numberInRange(value.horizontalPadding, HORIZONTAL_PADDING_BOUNDS.min, HORIZONTAL_PADDING_BOUNDS.max)

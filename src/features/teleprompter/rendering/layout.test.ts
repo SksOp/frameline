@@ -1,12 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
 import { wrapText, visibleLineRange } from "./layout";
-import { createRenderPlan, createScriptTimeline, horizontalPaddingPercent, playbackRate, playbackRateForMediaTime, renderFont, timestampUs } from "./plan";
+import { createRenderPlan, createScriptTimeline, dimensionsFor, horizontalPaddingPercent, playbackRate, playbackRateForMediaTime, renderFont, timestampUs } from "./plan";
 import { DEFAULT_SETTINGS } from "../types";
 import { paintFrame, visibleLineRangeAtTop } from "./paint-frame";
 
 const measure = { measureText: (text: string) => ({ width: text.length * 10 }) };
 describe("rendering", () => {
-  it("uses the compact reading defaults", () => expect(DEFAULT_SETTINGS).toMatchObject({ wordsPerMinute: 120, fontSize: 42, lineHeight: 1.5, leadInSeconds: 0, showProgress: true }));
+  it("uses the compact classic-frame defaults", () => expect(DEFAULT_SETTINGS).toMatchObject({ wordsPerMinute: 120, fontSize: 42, lineHeight: 1.5, leadInSeconds: 0, showProgress: true, aspectRatio: "4:3" }));
+  it("supports a vertical phone frame", () => expect(dimensionsFor("9:16")).toEqual({ width: 450, height: 800 }));
   it("wraps deterministically and preserves paragraphs", () => expect(wrapText("one two\n\nthree", 45, measure)).toEqual(["one", "two", "", "three"]));
   it("safely wraps, plans, and paints an empty script", () => {
     expect(wrapText("", 100, measure)).toEqual([""]);
@@ -43,6 +44,7 @@ describe("rendering", () => {
     expect(horizontalPaddingPercent({ aspectRatio: "3:1", horizontalPadding: 56 })).toBeCloseTo(56 / 900 * 100);
     expect(horizontalPaddingPercent({ aspectRatio: "16:9", horizontalPadding: 56 })).toBeCloseTo(7);
     expect(horizontalPaddingPercent({ aspectRatio: "4:3", horizontalPadding: 72 })).toBeCloseTo(10);
+    expect(horizontalPaddingPercent({ aspectRatio: "9:16", horizontalPadding: 45 })).toBeCloseTo(10);
   });
   it("paints the progress track into generated frames when enabled", () => {
     const context = { ...measure, fillRect: vi.fn(), fillText: vi.fn(), fillStyle: "", font: "", textAlign: "center", textBaseline: "middle" } as unknown as CanvasRenderingContext2D;

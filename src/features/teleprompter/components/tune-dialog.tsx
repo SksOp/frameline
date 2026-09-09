@@ -200,6 +200,7 @@ function TuneControls({
               <NativeSelectOption value="3:1">Wide · 3:1</NativeSelectOption>
               <NativeSelectOption value="16:9">Video · 16:9</NativeSelectOption>
               <NativeSelectOption value="4:3">Classic · 4:3</NativeSelectOption>
+              <NativeSelectOption value="9:16">Vertical · 9:16</NativeSelectOption>
             </NativeSelect>
           </label>
           <label className={controlClass}>

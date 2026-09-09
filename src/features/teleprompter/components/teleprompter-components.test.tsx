@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DEFAULT_SETTINGS, type TeleprompterSettings } from "../types";
 import type { SessionState } from "../use-teleprompter-session";
 import { PreparedVideo } from "./prepared-video";
+import { ScriptDialog } from "./script-dialog";
 import { TeleprompterDock } from "./teleprompter-dock";
 import { TuneDialog } from "./tune-dialog";
 
@@ -13,25 +14,35 @@ const action = { label: "Prepare", ariaLabel: "Prepare video", disabled: false }
 
 function renderDock(overrides: Partial<Parameters<typeof TeleprompterDock>[0]> = {}) {
   return render(<TeleprompterDock
-    mobileView="script"
+    mode="editor"
+    desktopPreviewVisible
+    previewPaused={false}
     sessionState="idle"
     preparedVideoIsStale={false}
     action={action}
-    onMobileViewChange={() => undefined}
+    onClear={async () => undefined}
+    onResetSettings={() => undefined}
+    onOpenScript={() => undefined}
     onOpenSettings={() => undefined}
+    onEnterStudio={() => undefined}
+    onExitStudio={() => undefined}
+    onShowPreview={() => undefined}
+    onToggleDesktopPreview={() => undefined}
+    onTogglePause={() => undefined}
+    onOpenPip={() => undefined}
     onPrimaryAction={() => undefined}
     {...overrides}
   />);
 }
 
 describe("TeleprompterDock", () => {
-  it("marks the active mobile view with aria-pressed and reports switches", () => {
-    const onMobileViewChange = vi.fn();
-    renderDock({ onMobileViewChange });
-    expect(screen.getByRole("button", { name: "Script" }).getAttribute("aria-pressed")).toBe("true");
-    expect(screen.getByRole("button", { name: "Preview" }).getAttribute("aria-pressed")).toBe("false");
-    fireEvent.click(screen.getByRole("button", { name: "Preview" }));
-    expect(onMobileViewChange).toHaveBeenCalledWith("preview");
+  it("toggles the desktop preview from the compact dock", () => {
+    const onToggleDesktopPreview = vi.fn();
+    renderDock({ onToggleDesktopPreview });
+    const preview = screen.getByRole("button", { name: "Hide preview" });
+    expect(preview.getAttribute("aria-pressed")).toBe("true");
+    fireEvent.click(preview);
+    expect(onToggleDesktopPreview).toHaveBeenCalledOnce();
   });
 
   it("labels and disables the primary action from the derived action state", () => {
@@ -52,6 +63,20 @@ describe("TeleprompterDock", () => {
     const primary = screen.getByRole("button", { name: "Prepare video" });
     expect(primary.dataset.sessionState).toBe(sessionState);
     expect(primary.className).toContain(expected);
+  });
+
+  it("keeps studio controls focused on reading", () => {
+    renderDock({ mode: "studio" });
+    expect(screen.getByRole("button", { name: "Pause" })).not.toBeNull();
+    expect(screen.getByRole("button", { name: "Close" })).not.toBeNull();
+    expect(screen.queryByRole("button", { name: "Hide preview" })).toBeNull();
+  });
+
+  it("opens the phone actions as an upward menu", async () => {
+    renderDock();
+    fireEvent.click(screen.getByRole("button", { name: "Frameline" }));
+    expect(await screen.findByRole("menu")).not.toBeNull();
+    expect(screen.getByRole("menuitem", { name: "Browse apps" })).not.toBeNull();
   });
 });
 
@@ -75,6 +100,26 @@ describe("PreparedVideo", () => {
     expect(section.dataset.ready).toBe("true");
     expect(section.className).not.toContain("hidden");
     expect(screen.getByLabelText("Prepared teleprompter video")).not.toBeNull();
+  });
+});
+
+describe("ScriptDialog", () => {
+  beforeEach(() => vi.stubGlobal("matchMedia", vi.fn().mockReturnValue({
+    matches: false,
+    media: "(max-width: 760px)",
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
+  })));
+  afterEach(() => vi.unstubAllGlobals());
+
+  it("edits and clears the script in a focused dialog", () => {
+    const onTextChange = vi.fn();
+    const onClear = vi.fn(async () => undefined);
+    render(<ScriptDialog open text="Camera copy" draftReady persistenceError={null} onClose={() => undefined} onClear={onClear} onTextChange={onTextChange} />);
+    fireEvent.change(screen.getByRole("textbox", { name: "Your script" }), { target: { value: "New copy" } });
+    fireEvent.click(screen.getByRole("button", { name: "Clear script" }));
+    expect(onTextChange).toHaveBeenCalledWith("New copy");
+    expect(onClear).toHaveBeenCalledOnce();
   });
 });
 

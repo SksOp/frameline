@@ -51,6 +51,7 @@ export function createScriptTimeline(text: string, settings: Pick<TeleprompterSe
 
 export function dimensionsFor(aspect: TeleprompterSettings["aspectRatio"]) {
   if (aspect === "16:9") return { width: 800, height: 450 };
+  if (aspect === "9:16") return { width: 450, height: 800 };
   if (aspect === "4:3") return { width: 720, height: 540 };
   return { width: 900, height: 300 };
 }

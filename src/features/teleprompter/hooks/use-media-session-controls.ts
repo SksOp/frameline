@@ -41,7 +41,10 @@ export function useMediaSessionControls(
   explicitDuration: number, // Added explicit duration parameter
 ) {
   const handlersRef = useRef(handlers);
-  handlersRef.current = handlers;
+
+  useEffect(() => {
+    handlersRef.current = handlers;
+  }, [handlers]);
 
   useEffect(() => {
     const video = videoRef.current;
